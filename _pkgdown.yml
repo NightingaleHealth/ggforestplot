@@ -1,0 +1,72 @@
+template:
+    params:
+        bootswatch: cosmo
+navbar:
+    title: ggforestplot
+    left:
+        -
+            text: Vignettes
+            href: articles/index.html
+        -
+            text: Functions
+            href: reference/index.html
+        -
+            text: Changelog
+            href: news/index.html
+        -
+            text: 'Nightingale Health'
+            href: 'https://nightingalehealth.com'
+    right:
+        -
+            icon: fa-twitter
+            href: 'https://twitter.com/NgaleHealth'
+        -
+            icon: fa-github
+            href: 'https://github.com/nightingalehealth'
+        -
+            icon: n-inverse
+            href: 'https://nightingalehealth.com/'
+home:
+    links:
+        -
+            text: 'Download from GitHub'
+            href: 'https://github.com/nightingalehealth/ggforestplot'
+        -
+            text: 'Report a bug'
+            href: 'https://github.com/nightingalehealth/ggforestplot/issues'
+        -
+            text: 'Contact'
+            href: 'https://nightingalehealth.com/contact'
+articles:
+    -
+        title: 'Getting started'
+        desc: "These vignettes provide an introduction to creating forestplot
+        visualizations and performing basic exploratory data analysis using
+        **ggforestplot** package.\n"
+        contents:
+            - ggforestplot
+            - nmr-data-analysis-tutorial
+reference:
+    -
+        title: 'Visualization utilities'
+        desc: "Functions and utilities for creating forestplots.\n"
+        contents:
+            - forestplot
+            - plot_all_NG_biomarkers
+            - display_ng_colours
+            - ng_colour
+            - starts_with("scale_colour")
+            - starts_with("ng_")
+            - geom_effect
+            - geom_stripes
+            - theme_forest
+    -
+        title: 'Utilities for biomarker discovery analysis'
+        desc: "Function for assisting in multiple regression analysis.\n"
+        contents:
+            - discovery_regression
+    -
+        title: Datasets
+        desc: "Demo datasets and peer-review published data.\n"
+        contents:
+            - 'starts_with("df_")'
