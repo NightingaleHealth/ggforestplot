@@ -31,7 +31,7 @@ test_that("plot_all_NG_biomarkers works ", {
       estimate =beta,
       se = se,
       pvalue = pvalue,
-      colour = study,
+      colour = trait,
       filename = file.path(tmp, "plot_all.pdf"),
       xlab = "1-SD increment in BMI
     per 1-SD increment in biomarker concentration"

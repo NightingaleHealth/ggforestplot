@@ -19,7 +19,7 @@ Authors:
   \item Juuso Parkkinen \email{juuso.parkkinen@nightingalehealth.com} (0000-0002-7818-5901)
   \item Emmi Tikkanen \email{emmi.tikkanen@nightingalehealth.com} (0000-0003-1634-4134)
   \item Peter Würtz \email{peter.wurtz@nightingalehealth.com} (0000-0002-5832-0221)
-  \item Antti Kangas \email{antti.kangas@nightingalehealth.com}
+  \item Antti Kangas \email{antti.kangas@nightingalehealth.com} (0000-0001-7492-1732)
 }
 
 Other contributors:

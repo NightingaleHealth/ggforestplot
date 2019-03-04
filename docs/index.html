@@ -95,7 +95,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <p><br></p>
 <div style="text-align:left">
-<span><a href="https://nightingalehealth.com/"> <img src="reference/figures/ggforestplotlogo.png" width="110" alt="Logo"></a>
+<span><a href="https://nightingalehealth.com/"> <img src="reference/figures/logo.png" width="110" alt="Logo"></a>
 <h2>
 <strong>ggforestplot</strong>
 </h2>
@@ -105,9 +105,9 @@ Visualizing Measures of Effect
 <p></p></span>
 </div>
 <p><br></p>
-<p><code>ggforestplot</code> is an R package, mainly, for plotting measures of effect and their confidence intervals, e.g. linear associations or log and hazard ratios, in a forestplot layout, a.k.a. blobbogram.</p>
-<p>The main plotting function is <code><a href="reference/forestplot.html">ggforestplot::forestplot()</a></code> which will create a single-column forestplot of effects given an input data frame.</p>
-<p>The two vignettes <a href="articles/ggforestplot.html">Using ggforestplot</a> and <a href="articles/nmr-data-analysis-tutorial.html">NMR data analysis tutorial</a> provide an introduction to creating forestplot visualizations with custom groupings and performing basic exploratory analysis using demo metabolic data of the <a href="https://nightingalehealth.com/technology">Nightingale Health NMR platform</a>.</p>
+<p><code>ggforestplot</code> is an R package for plotting measures of effect and their confidence intervals (e.g. linear associations or log and hazard ratios, in a forestplot layout, a.k.a. blobbogram).</p>
+<p>The main plotting function is <code><a href="reference/forestplot.html">ggforestplot::forestplot()</a></code> which will create a single-column forestplot of effects, given an input data frame.</p>
+<p>The two vignettes <a href="articles/ggforestplot.html">Using ggforestplot</a> and <a href="articles/nmr-data-analysis-tutorial.html">NMR data analysis tutorial</a> provide an introduction to creating forestplot visualizations with custom groupings and performing basic exploratory analysis (using demo metabolic data of the <a href="https://nightingalehealth.com/technology">Nightingale Health NMR platform</a>).</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -118,6 +118,10 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
+<p>Below we briefly showcase the usage of <code>ggforestplot</code> with publicly available datasets, which are also included in the package (see <a href="https://www.biorxiv.org/content/10.1101/513648v1">A. V. Ahola-Olli et al. (2019)</a>).</p>
+<div id="linear-associations" class="section level3">
+<h3 class="hasAnchor">
+<a href="#linear-associations" class="anchor"></a>Linear associations</h3>
 <p>Plot a vertical forestplot for linear associations of blood biomarkers to insulin resistance (HOMA-IR), fasting glucose and Body Mass Index (BMI).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load tidyverse and ggforestplot</span>
 <span class="co"># install.packages("tidyverse")</span>
@@ -135,12 +139,16 @@ df_linear &lt;-
   <span class="dt">df =</span> df_linear,
   <span class="dt">estimate =</span> beta,
   <span class="dt">logodds =</span> <span class="ot">FALSE</span>,
-  <span class="dt">colour =</span> study,
-  <span class="dt">title =</span> <span class="st">"Associations to BMI"</span>,
+  <span class="dt">colour =</span> trait,
+  <span class="dt">title =</span> <span class="st">"Associations to metabolic traits"</span>,
   <span class="dt">xlab =</span> <span class="st">"1-SD increment in cardiometabolic trait</span>
 <span class="st">  per 1-SD increment in biomarker concentration"</span>
 )</code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="700"></p>
+</div>
+<div id="odds-ratios" class="section level3">
+<h3 class="hasAnchor">
+<a href="#odds-ratios" class="anchor"></a>Odds ratios</h3>
 <p>Plot a vertical forestplot for odds ratios of blood biomarkers with risk for future type 2 diabetes; visualize all 4 available cohorts and their meta-analysis.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get subset of example, log odds ratios, data frame</span>
 df_logodds &lt;-
@@ -176,6 +184,7 @@ df_logodds &lt;-
   )</code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="700"></p>
 </div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -206,7 +215,7 @@ df_logodds &lt;-
 <li>Juuso Parkkinen <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-7818-5901" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 <li>Emmi Tikkanen <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-1634-4134" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 <li>Peter Würtz <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-5832-0221" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
-<li>Antti Kangas <br><small class="roles"> Author </small>  </li>
+<li>Antti Kangas <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-7492-1732" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>

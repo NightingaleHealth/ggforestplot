@@ -25,7 +25,7 @@ Authors@R: c(
     ),
     person(
         "Antti", "Kangas", email = "antti.kangas@nightingalehealth.com",
-        role = c("aut")
+        role = c("aut"), comment = c(ORCID = "0000-0001-7492-1732")
     ),
     person(
         "Nightingale Health Ltd.", email = "contact@nightingalehealth.com", 

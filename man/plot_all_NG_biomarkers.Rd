@@ -118,7 +118,7 @@ plot_all_NG_biomarkers(
   estimate = estimate,
   se = se,
   pvalue = pvalue,
-  colour = study,
+  colour = trait,
   filename = "biomarker_linear_associations.pdf",
   xlab = "1-SD increment in BMI
 per 1-SD increment in biomarker concentration"
