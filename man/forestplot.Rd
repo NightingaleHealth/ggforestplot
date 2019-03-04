@@ -94,7 +94,7 @@ forestplot(
   df = df_linear,
   estimate = beta,
   logodds = FALSE,
-  colour = study,
+  colour = trait,
   xlab = "1-SD increment in cardiometabolic trait
   per 1-SD increment in biomarker concentration"
 )

@@ -8,7 +8,7 @@
 \describe{
   \item{name}{Blood biomarker name. Note: glucose is missing as the results
   are adjusted for this biomarker.}
-  \item{study}{The response variable of the regression model, either BMI,
+  \item{trait}{The response variable of the regression model, either BMI,
   log(HOMA-IR) or fasting glucose.}
   \item{beta}{Linear regression coefficient \eqn{\beta}.}
   \item{se}{Standard error.}

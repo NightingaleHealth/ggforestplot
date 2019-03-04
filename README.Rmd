@@ -28,18 +28,18 @@ library(ggforestplot)
 
 <br>
 
-`ggforestplot` is an R package, mainly, for plotting measures of effect and their 
-confidence intervals, e.g. linear associations or log and hazard ratios, in a
-forestplot layout, a.k.a. blobbogram.
+`ggforestplot` is an R package for plotting measures of effect and their 
+confidence intervals (e.g. linear associations or log and hazard ratios, in a
+forestplot layout, a.k.a. blobbogram).
 
 The main plotting function is `ggforestplot::forestplot()` which will create a
-single-column forestplot of effects given an input data frame.
+single-column forestplot of effects, given an input data frame.
 
 The two vignettes [Using ggforestplot](articles/ggforestplot.html) and 
 [NMR data analysis tutorial](articles/nmr-data-analysis-tutorial.html) 
 provide an introduction to creating forestplot visualizations with custom 
-groupings and performing basic exploratory analysis using demo metabolic 
-data of the [Nightingale Health NMR platform](https://nightingalehealth.com/technology).
+groupings and performing basic exploratory analysis (using demo metabolic 
+data of the [Nightingale Health NMR platform](https://nightingalehealth.com/technology)).
 
 ## Installation
 
@@ -52,6 +52,11 @@ devtools::install_github("NightingaleHealth/ggforestplot")
 ```
 
 ## Examples
+
+Below we briefly showcase the usage of `ggforestplot` with publicly available 
+datasets, which are also included in the package (see [A. V. Ahola-Olli et al. (2019)](https://www.biorxiv.org/content/10.1101/513648v1)). 
+
+### Linear associations
 
 Plot a vertical forestplot for linear associations of blood biomarkers to 
 insulin resistance (HOMA-IR), fasting glucose and Body Mass Index (BMI).
@@ -73,12 +78,14 @@ forestplot(
   df = df_linear,
   estimate = beta,
   logodds = FALSE,
-  colour = study,
-  title = "Associations to BMI",
+  colour = trait,
+  title = "Associations to metabolic traits",
   xlab = "1-SD increment in cardiometabolic trait
   per 1-SD increment in biomarker concentration"
 )
 ```
+
+### Odds ratios
 
 Plot a vertical forestplot for odds ratios of blood biomarkers with risk for 
 future type 2 diabetes; visualize all 4 available cohorts and their meta-analysis.

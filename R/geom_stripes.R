@@ -35,8 +35,8 @@
 #'     ggplot2::aes(
 #'       xmin = xmin,
 #'       xmax = xmax,
-#'       colour = study,
-#'       shape = study,
+#'       colour = trait,
+#'       shape = trait,
 #'       filled = filled
 #'     ),
 #'     position = ggstance::position_dodgev(height = 0.5)

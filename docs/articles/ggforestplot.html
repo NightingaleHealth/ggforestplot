@@ -90,7 +90,7 @@
       <h1>Using ggforestplot</h1>
                         <h4 class="author">Nightingale Health Ltd.</h4>
             
-            <h4 class="date">2019-03-02</h4>
+            <h4 class="date">2019-03-04</h4>
       
       
       <div class="hidden name"><code>ggforestplot.Rmd</code></div>
@@ -102,8 +102,8 @@
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
-<p>The R package <code>ggforestplot</code> allows to plot grouped, vertical <a href="https://en.wikipedia.org/wiki/Forest_plot">forest plots</a>, a.k.a. blobbograms, and it’s based on <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>.</p>
-<p>In this tutorial we will go through its basic functionality using demo data from <a href="https://nightingalehealth.com/technology">Nightingale’s NMR platform</a>.</p>
+<p>The R package <code>ggforestplot</code> allows to plot vertical <a href="https://en.wikipedia.org/wiki/Forest_plot">forest plots</a>, a.k.a. blobbograms, and it’s based on <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a>.</p>
+<p>In this tutorial we will go through its basic functionality, as well as how one can produce grouped plots, using demo data from <a href="https://nightingalehealth.com/technology">Nightingale’s NMR platform</a>.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -129,7 +129,7 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 df &lt;-
 <span class="st">  </span>ggforestplot<span class="op">::</span>df_linear_associations <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(
-    study <span class="op">==</span><span class="st"> "BMI"</span>,
+    trait <span class="op">==</span><span class="st"> "BMI"</span>,
     dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span>() <span class="op">&lt;=</span><span class="st"> </span><span class="dv">30</span>
   )
 
@@ -149,7 +149,7 @@ ggforestplot<span class="op">::</span><span class="kw"><a href="https://www.rdoc
 ggforestplot<span class="op">::</span>df_linear_associations <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>()
 <span class="co">#&gt; # A tibble: 681 x 5</span>
-<span class="co">#&gt;    name          study    beta      se    pvalue</span>
+<span class="co">#&gt;    name          trait    beta      se    pvalue</span>
 <span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 Isoleucine    BMI    0.339  0.00945 1.11e-281</span>
 <span class="co">#&gt;  2 Leucine       BMI    0.343  0.00951 1.25e-285</span>
@@ -167,7 +167,7 @@ ggforestplot<span class="op">::</span>df_linear_associations <span class="op">%&
 <li>
 <code>name</code>: the names of the Nightingale serum biomarkers (Note: glucose is missing as the results are adjusted for this biomarker).</li>
 <li>
-<code>study</code>: the response variable of the regression model, BMI, log(HOMA-IR) or fasting glucose.</li>
+<code>trait</code>: the response variable of the regression model, BMI, log(HOMA-IR) or fasting glucose.</li>
 <li>
 <code>beta</code>: regression coefficient <span class="math inline">\(\beta\)</span>.</li>
 <li>
@@ -198,37 +198,37 @@ ggforestplot<span class="op">::</span><span class="kw"><a href="https://www.rdoc
 <p><img src="ggforestplot_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Notice how the non-significant results are now displayed as hollow points.</p>
 </div>
-<div id="comparing-several-studies" class="section level3">
+<div id="comparing-several-traits" class="section level3">
 <h3 class="hasAnchor">
-<a href="#comparing-several-studies" class="anchor"></a>Comparing several studies</h3>
+<a href="#comparing-several-traits" class="anchor"></a>Comparing several traits</h3>
 <p>Let us now go ahead and plot, along with the BMI, the associations with insulin resistance (HOMA-IR) and fasting glucose.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract the biomarker names</span>
 selected_bmrs &lt;-
 <span class="st">  </span>df <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">pull</span>(name)
 
-<span class="co"># Filter the demo dataset for the biomarkers above and all three studies:</span>
+<span class="co"># Filter the demo dataset for the biomarkers above and all three traits:</span>
 <span class="co"># BMI, HOMA-IR and fasting glucose</span>
-df_compare_studies &lt;-<span class="st"> </span>
+df_compare_traits &lt;-<span class="st"> </span>
 <span class="st">  </span>ggforestplot<span class="op">::</span>df_linear_associations <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(name <span class="op">%in%</span><span class="st"> </span>selected_bmrs)  <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co"># Set class to factor to set order of display. </span>
 <span class="st">  </span><span class="kw">mutate</span>(
-     <span class="dt">study =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(
-     study, 
+     <span class="dt">trait =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(
+     trait, 
      <span class="dt">levels =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"BMI"</span>, <span class="st">"HOMA-IR"</span>, <span class="st">"Fasting glucose"</span>))
   ) 
 
 <span class="co"># Draw a forestplot of cross-sectional, linear associations </span>
-<span class="co"># Notice how the df variable 'study' is used here to color the points</span>
+<span class="co"># Notice how the df variable 'trait' is used here to color the points</span>
 ggforestplot<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggforestplot/topics/forestplot">forestplot</a></span>(
-  <span class="dt">df =</span> df_compare_studies, 
+  <span class="dt">df =</span> df_compare_traits, 
   <span class="dt">estimate =</span> beta,
   <span class="dt">pvalue =</span> pvalue,
   <span class="dt">psignif =</span> <span class="fl">0.002</span>,
-  <span class="dt">xlab =</span> <span class="st">"1-SD increment in BMI</span><span class="ch">\n</span><span class="st">per 1-SD increment in biomarker concentration"</span>,
-  <span class="dt">title =</span> <span class="st">"Associations of blood biomarkers to BMI"</span>,
-  <span class="dt">colour =</span> study
+  <span class="dt">xlab =</span> <span class="st">"1-SD increment in cardiometabolic trait</span><span class="ch">\n</span><span class="st">per 1-SD increment in biomarker concentration"</span>,
+  <span class="dt">title =</span> <span class="st">"Biomarker associations to metabolic traits"</span>,
+  <span class="dt">colour =</span> trait
 ) </code></pre></div>
 <p><img src="ggforestplot_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
@@ -237,7 +237,7 @@ ggforestplot<span class="op">::</span><span class="kw"><a href="https://www.rdoc
 <a href="#grouping-the-biomarkers" class="anchor"></a>Grouping the biomarkers</h3>
 <p>Finally, we would like to group the blood biomarkers by category to improve the readability of the plot.</p>
 <p>The package includes also a data frame, <code><a href="../reference/df_NG_biomarker_metadata.html">ggforestplot::df_NG_biomarker_metadata</a></code>, with metadata on the Nightingale blood biomarkers, such as different naming options, descriptions, group/sugroup information and units of measurement. We will use the grouping information in this data frame to plot the 30 biomarkers above in a grouped layout.</p>
-<p>We can acheive this by joining the biomarker metadata with the data frame <code>df_compare_studies</code> above, that contains the associations. We will then use a combination of the functions <code><a href="https://tidyr.tidyverse.org/reference/nest.html">tidyr::nest()</a></code> and <code><a href="https://purrr.tidyverse.org/reference/map2.html">purrr::map2()</a></code> in order to run the forestplot function for each of the groups separately. Finally, we will use the <code><a href="https://www.rdocumentation.org/packages/patchwork/topics/wrap_plots">patchwork::wrap_plots()</a></code> functions to assemble the final forestplot. The steps to do this are shown below.</p>
+<p>We can acheive this by joining the biomarker metadata with the data frame <code>df_compare_traits</code> above, that contains the associations. We will then use a combination of the functions <code><a href="https://tidyr.tidyverse.org/reference/nest.html">tidyr::nest()</a></code> and <code><a href="https://purrr.tidyverse.org/reference/map2.html">purrr::map2()</a></code> in order to run the forestplot function for each of the groups separately. Finally, we will use the <code><a href="https://www.rdocumentation.org/packages/patchwork/topics/wrap_plots">patchwork::wrap_plots()</a></code> functions to assemble the final forestplot. The steps to do this are shown below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install and attach the patchwork library</span>
 <span class="co"># devtools::install_github("thomasp85/patchwork")</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(patchwork)
@@ -246,18 +246,18 @@ ggforestplot<span class="op">::</span><span class="kw"><a href="https://www.rdoc
 <span class="co"># biomarkers under discussion</span>
 df_grouping &lt;-
 <span class="st">  </span>df_NG_biomarker_metadata <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(name <span class="op">%in%</span><span class="st"> </span>df_compare_studies<span class="op">$</span>name)
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/filter">filter</a></span>(name <span class="op">%in%</span><span class="st"> </span>df_compare_traits<span class="op">$</span>name)
 
-<span class="co"># Join the association data frame df_compare_studies with group data</span>
-df_compare_studies_groups &lt;-
-<span class="st">  </span>df_compare_studies <span class="op">%&gt;%</span>
+<span class="co"># Join the association data frame df_compare_traits with group data</span>
+df_compare_traits_groups &lt;-
+<span class="st">  </span>df_compare_traits <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="co"># use right_join, with df_grouping on the right, to preserve the order of </span>
 <span class="st">  </span><span class="co"># biomarkers it specifies. </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">right_join</a></span>(., df_grouping, <span class="dt">by =</span> <span class="st">"name"</span>) 
 
 <span class="co"># Draw a forestplot of cross-sectional, linear associations.</span>
 ggplot_multi &lt;-
-<span class="st">  </span>df_compare_studies_groups <span class="op">%&gt;%</span>
+<span class="st">  </span>df_compare_traits_groups <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>group, <span class="dt">.key =</span> <span class="st">"data"</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="co"># Apply forestplot to each group </span>
 <span class="st">  </span><span class="kw">mutate</span>(
@@ -267,8 +267,8 @@ ggplot_multi &lt;-
         <span class="dt">estimate =</span> beta,
         <span class="dt">pvalue =</span> pvalue,
         <span class="dt">psignif =</span> <span class="fl">0.002</span>,
-        <span class="dt">xlab =</span> <span class="st">"1-SD increment in BMI</span><span class="ch">\n</span><span class="st">per 1-SD increment in biomarker concentration"</span>,
-        <span class="dt">colour =</span> study,
+        <span class="dt">xlab =</span> <span class="st">"1-SD increment in cardiometabolic trait</span><span class="ch">\n</span><span class="st">per 1-SD increment in biomarker concentration"</span>,
+        <span class="dt">colour =</span> trait,
         <span class="dt">title =</span> .y
       ) <span class="op">+</span>
 <span class="st">        </span>ggplot2<span class="op">::</span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span>(<span class="dt">xlim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="fl">0.3</span>, <span class="fl">0.4</span>))
@@ -416,7 +416,7 @@ df &lt;-
   <span class="dt">estimate =</span> beta,
   <span class="dt">se =</span> se,
   <span class="dt">pvalue =</span> pvalue,
-  <span class="dt">colour =</span> study,
+  <span class="dt">colour =</span> trait,
   <span class="dt">filename =</span> <span class="st">"biomarker_linear_associations.pdf"</span>,
   <span class="dt">xlab =</span> <span class="st">"1-SD increment in BMI</span><span class="ch">\n</span><span class="st">per 1-SD increment in biomarker concentration"</span>
 )</code></pre></div>

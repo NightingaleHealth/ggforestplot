@@ -17,7 +17,7 @@ test_that("forestplot plots linear results", {
       df = df_linear,
       estimate = beta,
       logodds = FALSE,
-      colour = study,
+      colour = trait,
       title = "Associations to BMI"
     ),
     path = "linear"
@@ -32,7 +32,7 @@ test_that("forestplot plots linear results of a df with non-default names", {
     df_linear %>%
     dplyr::rename(
       id = name,
-      pheno = study,
+      pheno = trait,
       betacoef = beta,
       secoef = se,
       pval = pvalue
@@ -60,7 +60,7 @@ test_that("forestplot ci parameter works", {
       df = df_linear,
       estimate = beta,
       logodds = FALSE,
-      colour = study,
+      colour = trait,
       ci = 0.80,
       title = "Associations to BMI"
     ),

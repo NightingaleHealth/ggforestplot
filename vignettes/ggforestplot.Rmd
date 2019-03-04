@@ -23,12 +23,13 @@ library(patchwork)
 ```
 
 ## Overview
-The R package `ggforestplot` allows to plot grouped, vertical 
+The R package `ggforestplot` allows to plot vertical 
 [forest plots](https://en.wikipedia.org/wiki/Forest_plot), 
 a.k.a. blobbograms, and it's 
 based on [`ggplot2`](https://ggplot2.tidyverse.org/).
 
-In this tutorial we will go through its basic functionality using demo data from
+In this tutorial we will go through its basic functionality, as well as how one 
+can produce grouped plots, using demo data from 
 [Nightingale's NMR platform](https://nightingalehealth.com/technology).
 
 ## Installation
@@ -61,7 +62,7 @@ library(tidyverse)
 df <-
   ggforestplot::df_linear_associations %>%
   filter(
-    study == "BMI",
+    trait == "BMI",
     dplyr::row_number() <= 30
   )
 
@@ -96,7 +97,7 @@ The variables, as also stated in the documentation, are:
 
 * `name`: the names of the Nightingale serum biomarkers (Note: glucose 
 is missing as the results are adjusted for this biomarker).
-* `study`: the response variable of the regression model, BMI, 
+* `trait`: the response variable of the regression model, BMI, 
 log(HOMA-IR) or fasting glucose.
 * `beta`: regression coefficient $\beta$.
 * `se`: standard deviation
@@ -144,7 +145,7 @@ ggforestplot::forestplot(
 
 Notice how the non-significant results are now displayed as hollow points.
 
-### Comparing several studies 
+### Comparing several traits 
 
 Let us now go ahead and plot, along with the BMI, the associations with insulin 
 resistance (HOMA-IR) and fasting glucose.
@@ -155,28 +156,28 @@ selected_bmrs <-
   df %>% 
   pull(name)
 
-# Filter the demo dataset for the biomarkers above and all three studies:
+# Filter the demo dataset for the biomarkers above and all three traits:
 # BMI, HOMA-IR and fasting glucose
-df_compare_studies <- 
+df_compare_traits <- 
   ggforestplot::df_linear_associations %>% 
   filter(name %in% selected_bmrs)  %>% 
   # Set class to factor to set order of display. 
   mutate(
-     study = factor(
-     study, 
+     trait = factor(
+     trait, 
      levels = c("BMI", "HOMA-IR", "Fasting glucose"))
   ) 
 
 # Draw a forestplot of cross-sectional, linear associations 
-# Notice how the df variable 'study' is used here to color the points
+# Notice how the df variable 'trait' is used here to color the points
 ggforestplot::forestplot(
-  df = df_compare_studies, 
+  df = df_compare_traits, 
   estimate = beta,
   pvalue = pvalue,
   psignif = 0.002,
-  xlab = "1-SD increment in BMI\nper 1-SD increment in biomarker concentration",
-  title = "Associations of blood biomarkers to BMI",
-  colour = study
+  xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
+  title = "Biomarker associations to metabolic traits",
+  colour = trait
 ) 
 ```
 
@@ -192,7 +193,7 @@ the grouping information in this data frame to plot the 30 biomarkers above in
 a grouped layout. 
 
 We can acheive this by joining the biomarker metadata with the data frame 
-`df_compare_studies` above, that contains the associations. We will then use 
+`df_compare_traits` above, that contains the associations. We will then use 
 a combination of the functions `tidyr::nest()` and `purrr::map2()` in order 
 to run the forestplot function for each of the groups separately. Finally, 
 we will use the `patchwork::wrap_plots()` functions to assemble the final 
@@ -207,18 +208,18 @@ library(patchwork)
 # biomarkers under discussion
 df_grouping <-
   df_NG_biomarker_metadata %>%
-  filter(name %in% df_compare_studies$name)
+  filter(name %in% df_compare_traits$name)
 
-# Join the association data frame df_compare_studies with group data
-df_compare_studies_groups <-
-  df_compare_studies %>%
+# Join the association data frame df_compare_traits with group data
+df_compare_traits_groups <-
+  df_compare_traits %>%
   # use right_join, with df_grouping on the right, to preserve the order of 
   # biomarkers it specifies. 
   dplyr::right_join(., df_grouping, by = "name") 
 
 # Draw a forestplot of cross-sectional, linear associations.
 ggplot_multi <-
-  df_compare_studies_groups %>%
+  df_compare_traits_groups %>%
   nest(-group, .key = "data") %>%
   # Apply forestplot to each group 
   mutate(
@@ -228,8 +229,8 @@ ggplot_multi <-
         estimate = beta,
         pvalue = pvalue,
         psignif = 0.002,
-        xlab = "1-SD increment in BMI\nper 1-SD increment in biomarker concentration",
-        colour = study,
+        xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
+        colour = trait,
         title = .y
       ) +
         ggplot2::coord_cartesian(xlim = c(-0.3, 0.4))
@@ -397,7 +398,7 @@ plot_all_NG_biomarkers(
   estimate = beta,
   se = se,
   pvalue = pvalue,
-  colour = study,
+  colour = trait,
   filename = "biomarker_linear_associations.pdf",
   xlab = "1-SD increment in BMI\nper 1-SD increment in biomarker concentration"
 )
@@ -425,7 +426,7 @@ plot_all_NG_biomarkers(
   estimate = beta,
   se = se,
   pvalue = pvalue,
-  colour = study,
+  colour = trait,
   filename = "figures/biomarker_linear_associations.pdf",
   xlab = "1-SD increment in BMI\nper 1-SD increment in biomarker concentration"
 )

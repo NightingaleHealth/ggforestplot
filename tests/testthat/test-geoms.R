@@ -32,8 +32,8 @@ test_that("geom_effect works", {
         ggplot2::aes(
           xmin = xmin,
           xmax = xmax,
-          colour = study,
-          shape = study,
+          colour = trait,
+          shape = trait,
           filled = filled
         ),
         position = ggstance::position_dodgev(height = 0.5)
@@ -52,8 +52,8 @@ test_that("geom_stripes works", {
         ggplot2::aes(
           xmin = xmin,
           xmax = xmax,
-          colour = study,
-          shape = study,
+          colour = trait,
+          shape = trait,
           filled = filled
         ),
         position = ggstance::position_dodgev(height = 0.5)
@@ -72,8 +72,8 @@ test_that("theme_forest works", {
         ggplot2::aes(
           xmin = xmin,
           xmax = xmax,
-          colour = study,
-          shape = study,
+          colour = trait,
+          shape = trait,
           filled = filled
         ),
         position = ggstance::position_dodgev(height = 0.5)
