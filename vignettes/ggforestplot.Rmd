@@ -404,7 +404,10 @@ plot_all_NG_biomarkers(
 )
 ```
 
-```{r, tidy = FALSE, include = FALSE}
+```{r, tidy = FALSE, include = FALSE, eval = FALSE}
+# ------------> Evaluate this only when you want to refresh the pdf plots in 
+# ------------> figures/ Don't update them everytime if not necessary as git 
+# ------------> saves multiple copies. 
 # Join the built-in association demo dataset with a variable that contains
 # the machine readable names of Nightingale biomarkers. (Note: if you
 # have built your association data frame using the Nightingale CSV result file, 

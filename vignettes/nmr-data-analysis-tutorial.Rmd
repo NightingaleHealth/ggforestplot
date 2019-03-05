@@ -616,7 +616,10 @@ plot_all_NG_biomarkers(
 )
 ```
 
-```{r, tidy = FALSE, include = FALSE}
+```{r, tidy = FALSE, include = FALSE, eval = FALSE}
+# ------------> Evaluate this only when you want to refresh the pdf plots in 
+# ------------> figures/ Don't update them everytime if not necessary as git 
+# ------------> saves multiple copies. 
 # Plot in all biomarkers in a two-page pdf file
 plot_all_NG_biomarkers(
   df = df_assoc_per_biomarker_bmi, 

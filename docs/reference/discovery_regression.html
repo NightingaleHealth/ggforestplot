@@ -105,12 +105,6 @@
      
   </a>
 </li>
-<li>
-  <a href="https://nightingalehealth.com/">
-    <span class="n n-inverse"></span>
-     
-  </a>
-</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -216,12 +210,19 @@ of the linear model.</p>
   <span class='co'># Select only model variables</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>nmr_biomarkers</span>, <span class='no'>gender</span>, <span class='no'>BMI</span>) <span class='kw'>%&gt;%</span>
   <span class='co'># log-tranform biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log1p</a></span>(<span class='no'>.</span>))) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log1p</a></span>(<span class='no'>.</span>))) <span class='kw'>%&gt;%</span>
   <span class='co'># Scale biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>.</span>)))) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>.</span>)))) <span class='kw'>%&gt;%</span>
   <span class='co'># Collapse to a long format</span>
-  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>biomarkervalue</span>, <span class='no'>nmr_biomarkers</span>)
-
+  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>biomarkervalue</span>, <span class='no'>nmr_biomarkers</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: funs() is soft deprecated as of dplyr 0.8.0</span>
+#&gt; <span class='warning'>please use list() instead</span>
+#&gt; <span class='warning'></span>
+#&gt; <span class='warning'># Before:</span>
+#&gt; <span class='warning'>funs(name = f(.)</span>
+#&gt; <span class='warning'></span>
+#&gt; <span class='warning'># After: </span>
+#&gt; <span class='warning'>list(name = ~f(.))</span>
+#&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once per session.</span><span></span></div><div class='input'>
 <span class='no'>df_assoc_per_biomarker</span> <span class='kw'>&lt;-</span>
   <span class='fu'>discovery_regression</span>(
     <span class='kw'>df_long</span> <span class='kw'>=</span> <span class='no'>df_long</span>,
@@ -277,9 +278,9 @@ per 1-SD increment in BMI"</span>,
     <span class='no'>baseline_age</span>
   ) <span class='kw'>%&gt;%</span>
   <span class='co'># log-tranform biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log1p</a></span>(<span class='no'>.</span>))) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log1p</a></span>(<span class='no'>.</span>))) <span class='kw'>%&gt;%</span>
   <span class='co'># Scale biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>.</span>)))) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/numeric'>as.numeric</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/scale'>scale</a></span>(<span class='no'>.</span>)))) <span class='kw'>%&gt;%</span>
   <span class='co'># Collapse to a long format</span>
   <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>biomarkervalue</span>, <span class='no'>nmr_biomarkers</span>)
 
@@ -319,7 +320,7 @@ per 1-SD increment in BMI"</span>,
 per 1-SD increment in biomarker concentration"</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"Cholesterol and risk of future type 2 diabetes"</span>,
   <span class='kw'>logodds</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</div><div class='img'><img src='discovery_regression-2.png' alt='' width='700' height='433' /></div></pre>
+)</div><div class='img'><img src='discovery_regression-2.png' alt='' width='700' height='433' /></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
