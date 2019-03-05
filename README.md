@@ -2,7 +2,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <br>
 
-<span><a href="https://nightingalehealth.com/"> <img src="man/figures/logo.png" width=110 alt="Logo"/> </a>
+<span><a href="https://nightingalehealth.github.io/ggforestplot/index.html"> <img src="man/figures/logo.png" width=110 alt="Logo"/> </a>
 <h2>
 <strong>ggforestplot</strong>
 </h2>
@@ -17,7 +17,7 @@ Visualizing Measures of Effect
 
 The main plotting function is `ggforestplot::forestplot()` which will create a single-column forestplot of effects, given an input data frame.
 
-The two vignettes [Using ggforestplot](articles/ggforestplot.html) and [NMR data analysis tutorial](articles/nmr-data-analysis-tutorial.html) provide an introduction to creating forestplot visualizations with custom groupings and performing basic exploratory analysis (using demo metabolic data of the [Nightingale Health NMR platform](https://nightingalehealth.com/technology)).
+In the package [webpage](https://nightingalehealth.github.io/ggforestplot/index.html), the two vignettes [Using ggforestplot](https://nightingalehealth.github.io/ggforestplot/articles/ggforestplot.html) and [NMR data analysis tutorial](https://nightingalehealth.github.io/ggforestplot/articles/nmr-data-analysis-tutorial.html) provide an introduction to creating forestplot visualizations with custom groupings and performing basic exploratory analysis (using demo metabolic data of the [Nightingale Health NMR platform](https://nightingalehealth.com/technology)).
 
 Installation
 ------------

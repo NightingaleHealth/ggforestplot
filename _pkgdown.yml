@@ -23,9 +23,6 @@ navbar:
         -
             icon: fa-github
             href: 'https://github.com/nightingalehealth'
-        -
-            icon: n-inverse
-            href: 'https://nightingalehealth.com/'
 home:
     links:
         -
