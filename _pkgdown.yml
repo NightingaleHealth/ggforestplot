@@ -1,6 +1,12 @@
 template:
     params:
         bootswatch: cosmo
+
+authors:
+  Nightingale Health Ltd.:
+    html: "<img src='NG_Logo.png' height='28' alt='Logo'/> "
+    href: https://nightingalehealth.com
+
 navbar:
     title: ggforestplot
     left:

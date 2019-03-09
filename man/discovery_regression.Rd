@@ -27,7 +27,7 @@ logistic and cox proportional hazards regression, respectively.}
 (or one that can be coerced to that class): a symbolic description of the model to be
 fitted. The details of model specification are given under ‘Details’ in the
 documentation of \code{stats::\link[stats]{formula}}. For the case of model
-\code{'coxph'}, the formula object must have with the response on the left of a ~
+\code{'coxph'}, the formula object must have the response on the left of a ~
 operator, and the rest of the terms on the right. The response must be a
 survival object, as returned by the \code{\link[survival]{Surv}} function.}
 
@@ -69,9 +69,9 @@ df_long <-
   # Select only model variables
   dplyr::select(nmr_biomarkers, gender, BMI) \%>\%
   # log-tranform biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(log1p(.))) \%>\%
+  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~log1p(.))) \%>\%
   # Scale biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(as.numeric(scale(.)))) \%>\%
+  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~as.numeric(scale(.)))) \%>\%
   # Collapse to a long format
   tidyr::gather(key = machine_readable_name, value = biomarkervalue, nmr_biomarkers)
 
@@ -131,9 +131,9 @@ df_long <-
     baseline_age
   ) \%>\%
   # log-tranform biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(log1p(.))) \%>\%
+  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~log1p(.))) \%>\%
   # Scale biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(as.numeric(scale(.)))) \%>\%
+  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~as.numeric(scale(.)))) \%>\%
   # Collapse to a long format
   tidyr::gather(key = machine_readable_name, value = biomarkervalue, nmr_biomarkers)
 
