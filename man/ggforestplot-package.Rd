@@ -10,6 +10,15 @@ ggforestplot is a package for plotting measures of effect, e.g. linear
 associations or log and hazard ratios, with their confidence interval in a
 forestplot layout. It's main plotting function is \code{forestplot()}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://nightingalehealth.github.io/ggforestplot/index.html}
+  \item \url{https://github.com/nightingalehealth/ggforestplot}
+  \item Report bugs at \url{https://github.com/nightingalehealth/ggforestplot/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Maria Kalimeri \email{maria.kalimeri@nightingalehealth.com} (0000-0002-6569-7553)
 
@@ -24,7 +33,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Nightingale Health Ltd. \email{contact@nightingalehealth.com} [copyright holder]
+  \item Nightingale Health Ltd. \email{contact@nightingalehealth.com} [copyright holder, funder]
 }
 
 }

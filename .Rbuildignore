@@ -1,3 +1,4 @@
+^index\.Rmd$
 ^pkgdown$
 ^data-raw$
 ^README\.Rmd$
