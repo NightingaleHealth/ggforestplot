@@ -214,7 +214,7 @@ discovery_regression <- function(df_long,
 
   res <-
     df_long %>%
-    tidyr::nest(-!!key, .key = "data")
+    tidyr::nest(data = c(-!!key))
 
 
   # # Apply desired model

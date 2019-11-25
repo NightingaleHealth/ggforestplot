@@ -50,7 +50,7 @@
 #'   machine_readable_name = machine_readable_name,
 #'   # Notice we don't need to define explicitly 'name' as a name variable is
 #'   # already present in df and picked up automatically as y-axis labels.
-#'   estimate = estimate,
+#'   estimate = beta,
 #'   se = se,
 #'   pvalue = pvalue,
 #'   colour = trait,
@@ -85,7 +85,7 @@
 #'   machine_readable_name = machine_readable_name,
 #'   # Notice we don't need to define explicitly 'name' as a name variable is
 #'   # already present in df and picked up automatically as y-axis labels.
-#'   estimate = estimate,
+#'   estimate = beta,
 #'   se = se,
 #'   pvalue = pvalue,
 #'   colour = study,
@@ -142,26 +142,25 @@ plot_all_NG_biomarkers <- function(df,
       ) %>%
       dplyr::mutate_at(
         .vars = vars("xmin", "xmax"),
-        .funs = funs(
+        .funs = ~
           if (logodds) {
             exp(.)
           } else {
             .
           }
-        )
       )
     xmin <-
       df_xrange %>%
       dplyr::summarise_at(
         .vars = vars("xmin"),
-        .funs = funs(min(., na.rm = TRUE))
+        .funs = ~ min(., na.rm = TRUE)
       ) %>%
       pull(xmin)
     xmax <-
       df_xrange %>%
       dplyr::summarise_at(
         .vars = vars("xmax"),
-        .funs = funs(max(., na.rm = TRUE))
+        .funs = ~ max(., na.rm = TRUE)
       ) %>%
       pull(xmax)
     xlims <- c(xmin, xmax)
@@ -191,7 +190,7 @@ plot_all_NG_biomarkers <- function(df,
     # Draw a forestplot for each group in the column
     ggplot_multi <-
       df %>%
-      nest(-.data$group_custom, .key = "data") %>%
+      nest(data = -.data$group_custom) %>%
       # Apply forestplot to each group
       mutate(
         gg_groups = purrr::map2(

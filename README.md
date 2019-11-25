@@ -1,42 +1,72 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <br>
 
-<span><a href="https://nightingalehealth.github.io/ggforestplot/index.html"> <img src="man/figures/logo.png" width=110 alt="Logo"/> </a>
+<div style="text-align:left">
+
+<span><a href="https://nightingalehealth.github.io/ggforestplot/index.html">
+<img src="man/figures/logo.png" width=110 alt="Logo"/> </a>
+
 <h2>
+
 <strong>ggforestplot</strong>
+
 </h2>
+
 <h4>
+
 Visualizing Measures of Effect
+
 </h4>
+
 </span>
 
+</div>
+
 <br>
 
-`ggforestplot` is an R package for plotting measures of effect and their confidence intervals (e.g. linear associations or log and hazard ratios, in a forestplot layout, a.k.a. blobbogram).
+`ggforestplot` is an R package for plotting measures of effect and their
+confidence intervals (e.g. linear associations or log and hazard ratios,
+in a forestplot layout, a.k.a. blobbogram).
 
-The main plotting function is `ggforestplot::forestplot()` which will create a single-column forestplot of effects, given an input data frame.
+The main plotting function is `ggforestplot::forestplot()` which will
+create a single-column forestplot of effects, given an input data frame.
 
-In the package [webpage](https://nightingalehealth.github.io/ggforestplot/index.html), the two vignettes [Using ggforestplot](https://nightingalehealth.github.io/ggforestplot/articles/ggforestplot.html) and [NMR data analysis tutorial](https://nightingalehealth.github.io/ggforestplot/articles/nmr-data-analysis-tutorial.html) provide an introduction to creating forestplot visualizations with custom groupings and performing basic exploratory analysis (using demo metabolic data of the [Nightingale Health NMR platform](https://nightingalehealth.com/technology)).
+The two vignettes [Using
+ggforestplot](https://nightingalehealth.github.io/ggforestplot/articles/ggforestplot.html)
+and [NMR data analysis
+tutorial](https://nightingalehealth.github.io/ggforestplot/articles/nmr-data-analysis-tutorial.html)
+provide an introduction to creating forestplot visualizations with
+custom groupings and performing basic exploratory analysis (using demo
+metabolic data of the [Nightingale Health NMR
+platform](https://nightingalehealth.com/technology)).
 
-Installation
-------------
+## Installation
 
-You can install `ggforestplot` from github as shown below (unless already installed, you need to first install `devtools`):
+You can install `ggforestplot` from github as shown below (unless
+already installed, you need to first install `devtools`):
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("NightingaleHealth/ggforestplot")
 ```
 
-Examples
---------
+(Note: If dependencies are not installed automatically, try updating
+`devtools`.)
 
-Below we briefly showcase the usage of `ggforestplot` with publicly available datasets, which are also included in the package (see [A. V. Ahola-Olli et al. (2019)](https://www.biorxiv.org/content/10.1101/513648v1)).
+## Examples
+
+Below we briefly showcase the usage of `ggforestplot` with publicly
+available datasets, which are also included in the package (see [A. V.
+Ahola-Olli et al.
+(2019)](https://www.biorxiv.org/content/10.1101/513648v1)).
 
 ### Linear associations
 
-Plot a vertical forestplot for linear associations of blood biomarkers to insulin resistance (HOMA-IR), fasting glucose and Body Mass Index (BMI).
+Plot a vertical forestplot for linear associations of blood biomarkers
+to insulin resistance (HOMA-IR), fasting glucose and Body Mass Index
+(BMI).
 
 ``` r
 # Load tidyverse and ggforestplot
@@ -62,11 +92,13 @@ forestplot(
 )
 ```
 
-![](man/figures/README-unnamed-chunk-3-1.png)
+![](man/figures/README-unnamed-chunk-3-1.png)<!-- -->
 
 ### Odds ratios
 
-Plot a vertical forestplot for odds ratios of blood biomarkers with risk for future type 2 diabetes; visualize all 4 available cohorts and their meta-analysis.
+Plot a vertical forestplot for odds ratios of blood biomarkers with risk
+for future type 2 diabetes; visualize all 4 available cohorts and their
+meta-analysis.
 
 ``` r
 # Get subset of example, log odds ratios, data frame
@@ -103,4 +135,4 @@ forestplot(
   )
 ```
 
-![](man/figures/README-unnamed-chunk-4-1.png)
+![](man/figures/README-unnamed-chunk-4-1.png)<!-- -->

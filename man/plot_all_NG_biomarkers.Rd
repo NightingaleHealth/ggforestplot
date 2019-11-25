@@ -115,7 +115,7 @@ plot_all_NG_biomarkers(
   machine_readable_name = machine_readable_name,
   # Notice we don't need to define explicitly 'name' as a name variable is
   # already present in df and picked up automatically as y-axis labels.
-  estimate = estimate,
+  estimate = beta,
   se = se,
   pvalue = pvalue,
   colour = trait,
@@ -150,7 +150,7 @@ plot_all_NG_biomarkers(
   machine_readable_name = machine_readable_name,
   # Notice we don't need to define explicitly 'name' as a name variable is
   # already present in df and picked up automatically as y-axis labels.
-  estimate = estimate,
+  estimate = beta,
   se = se,
   pvalue = pvalue,
   colour = study,

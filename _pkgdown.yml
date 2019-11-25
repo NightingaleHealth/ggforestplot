@@ -32,12 +32,6 @@ navbar:
 home:
     links:
         -
-            text: 'Download from GitHub'
-            href: 'https://github.com/nightingalehealth/ggforestplot'
-        -
-            text: 'Report a bug'
-            href: 'https://github.com/nightingalehealth/ggforestplot/issues'
-        -
             text: 'Contact'
             href: 'https://nightingalehealth.com/contact'
 articles:

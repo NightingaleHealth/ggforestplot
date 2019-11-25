@@ -5,7 +5,8 @@ library(magrittr)
 # Extract names of relevant NMR biomarkers
 nmr_biomarkers <- names(df_demo_metabolic_data)[7:234]
 
-test_that("discovery_regression returns expected output for linear regression", {
+test_that(
+  "discovery_regression returns expected output for linear regression", {
 
   # Select only variables to be used for the model and collapse to a long format
   df_long <-
@@ -13,9 +14,13 @@ test_that("discovery_regression returns expected output for linear regression", 
     # Select only model variables
     dplyr::select(nmr_biomarkers, gender, BMI) %>%
     # log-tranform biomarkers
-    dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(log1p(.))) %>%
+    dplyr::mutate_at(
+      .vars = c(nmr_biomarkers),
+      .funs = ~ log1p(.)) %>%
     # Scale biomarkers
-    dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(as.numeric(scale(.)))) %>%
+    dplyr::mutate_at(
+      .vars = c(nmr_biomarkers),
+      .funs = ~ as.numeric(scale(.))) %>%
     # Collapse to a long format
     tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
 
@@ -75,11 +80,18 @@ test_that("discovery_regression returns expected output for cox regression", {
   df_long <-
     df_demo_metabolic_data %>%
     # Select only model variables
-    dplyr::select(nmr_biomarkers, gender, baseline_age, age_at_diabetes, incident_diabetes) %>%
+    dplyr::select(
+      nmr_biomarkers, gender, baseline_age, age_at_diabetes, incident_diabetes
+    ) %>%
     # log-tranform biomarkers
-    dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(log1p(.))) %>%
+    dplyr::mutate_at(
+      .vars = c(nmr_biomarkers), .funs = ~ log1p(.)
+    ) %>%
     # Scale biomarkers
-    dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(as.numeric(scale(.)))) %>%
+    dplyr::mutate_at(
+      .vars = c(nmr_biomarkers),
+      .funs = ~ as.numeric(scale(.))
+    ) %>%
     # Collapse to a long format
     tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
 
@@ -117,7 +129,8 @@ test_that("discovery_regression returns expected output for cox regression", {
   expect_equal(val, 0.3141)
 })
 
-test_that("discovery_regression returns expected output for logistic regression", {
+test_that(
+  "discovery_regression returns expected output for logistic regression", {
 
   # Select only variables to be used for the model and
   # collapse to a long format
@@ -126,9 +139,15 @@ test_that("discovery_regression returns expected output for logistic regression"
     # Select only model variables (avoid memory overhead)
     dplyr::select(nmr_biomarkers, gender) %>%
     # log-tranform biomarkers
-    dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(log1p(.))) %>%
+    dplyr::mutate_at(
+      .vars = c(nmr_biomarkers),
+      .funs = ~ log1p(.)
+    ) %>%
     # Scale biomarkers
-    dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(as.numeric(scale(.)))) %>%
+    dplyr::mutate_at(
+      .vars = c(nmr_biomarkers),
+      .funs = ~ as.numeric(scale(.))
+    ) %>%
     # Collapse to a long format
     tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
 

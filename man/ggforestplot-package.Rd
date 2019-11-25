@@ -25,6 +25,7 @@ Useful links:
 Authors:
 \itemize{
   \item Ilari Scheinin \email{ilari.scheinin@nightingalehealth.com} (0000-0002-4696-9066)
+  \item Vilma Jagerroos \email{vilma.jagerroos@nightingalehealth.com}
   \item Juuso Parkkinen \email{juuso.parkkinen@nightingalehealth.com} (0000-0002-7818-5901)
   \item Emmi Tikkanen \email{emmi.tikkanen@nightingalehealth.com} (0000-0003-1634-4134)
   \item Peter Würtz \email{peter.wurtz@nightingalehealth.com} (0000-0002-5832-0221)
