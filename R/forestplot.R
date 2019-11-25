@@ -130,7 +130,7 @@
 #'   # 'scale_x_continuous()'
 #'   ggplot2::scale_x_continuous(
 #'     trans = "log10",
-#'     breaks = c(0.5, 0.9, 0.95, 1.0, 1.2, 1.4, 1.5, 2.0)
+#'     breaks = c(0.5, 0.8, 1.0, 1.2, 1.5, 2.0)
 #'   )
 
 forestplot <- function(df,
