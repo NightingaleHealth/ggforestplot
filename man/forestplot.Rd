@@ -140,9 +140,15 @@ forestplot(
   ggplot2::scale_shape_manual(
     values = c(23L, 21L, 21L, 21L, 21L),
     labels = c("Meta-analysis", "NFBC-1997", "DILGOM", "FINRISK-1997", "YFS")
+  ) +
+  # Finally, you may want to have full control on the xtick locations, so you
+  # may define them explicitly by overwritting the existing
+  # 'scale_x_continuous()'
+  ggplot2::scale_x_continuous(
+    trans = "log10",
+    breaks = c(0.5, 0.9, 0.95, 1.0, 1.2, 1.4, 1.5, 2.0)
   )
-
 }
 \author{
-Maria Kalimeri, Ilari Scheinin
+Maria Kalimeri, Ilari Scheinin, Vilma Jagerroos
 }

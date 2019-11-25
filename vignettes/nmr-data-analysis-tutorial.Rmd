@@ -24,7 +24,7 @@ library(ggforestplot)
 
 In this tutorial we will go through the basic steps of importing blood metabolomics 
 data into R, joining them with phenotypes or endpoint data, and performing basic 
-epidimiological analysis. The tutorial uses simulated demo datasets from
+epidemiological analysis. The tutorial uses simulated demo datasets from
 [Nightingale's NMR platform](https://nightingalehealth.com/technology).
 
 ## Prerequisites
@@ -50,7 +50,7 @@ of code in the R console:
 
 ```{r, tidy = TRUE, eval = FALSE}
 # Install the tidyverse packages
-install.packages(tidyverse)
+install.packages("tidyverse")
 
 # Attach the tidyverse packages into the current session
 library(tidyverse)
@@ -117,7 +117,6 @@ Let us drop the tag columns as they are not used in this demo.
 ```{r, tidy = FALSE}
 df_nmr_results <- 
   df_nmr_results %>% 
-  # Make sure you ch
   select(-(EDTA_plasma:Unidentified_small_molecule_c))
 ```
 
@@ -285,7 +284,10 @@ regression for normal distribution of the residuals.)
 
 ```{r, message = FALSE, tidy = FALSE}
 # Extract names of NMR biomarkers
-nmr_biomarkers <- names(df_full_data)[2:229]
+nmr_biomarkers <- names(df_nmr_results %>% select(-Sample_id))
+
+# NMR biomarkers here should be 228
+stopifnot(length(nmr_biomarkers) == 228)
 
 # Select only variables to be used for the model and collapse to a long data 
 # format
@@ -608,7 +610,7 @@ plot_all_NG_biomarkers(
   df = df_assoc_per_biomarker_bmi, 
   machine_readable_name = biomarkerid,
   name = name, 
-  beta = beta, 
+  estimate = estimate, 
   se = se, 
   pvalue = pvalue, 
   xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
@@ -625,7 +627,7 @@ plot_all_NG_biomarkers(
   df = df_assoc_per_biomarker_bmi, 
   machine_readable_name = biomarkerid,
   name = name, 
-  beta = beta, 
+  estimate = estimate, 
   se = se, 
   pvalue = pvalue, 
   xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",

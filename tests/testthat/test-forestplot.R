@@ -161,3 +161,28 @@ test_that("forestplot plots non-significant values as hollow", {
   )
 })
 
+test_that("forestplot plots ticks to between 0 and 1 when logodd = TRUE", {
+  
+  set.seed(0)
+  
+  df_logodds <- data.frame(
+    name = letters[1:5],
+    beta = rnorm(5, 0.5, 0.1) %>% log10(),
+    se = stats::runif(5, 0.05, 0.1),
+    pvalue = rep(0.1, 5)
+  )
+  
+  vdiffr::expect_doppelganger(
+    title = "logodds4",
+    fig = forestplot(
+      df = df_logodds,
+      estimate = beta,
+      logodds = TRUE,
+      pvalue = pvalue,
+      psignif = 0.03,
+      title = "Tick test",
+      xlim = c(0.1, 4)
+    ),
+    path = "logodds"
+  )
+})

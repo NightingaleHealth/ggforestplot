@@ -44,13 +44,13 @@ test_that("ng_scale works", {
   expect_doppelganger(
     "Discrete fill scale",
     ggplot(iris, aes(Sepal.Width, Sepal.Length, fill = Species)) +
-      geom_raster() +
+      geom_tile() +
       scale_fill_ng_d(palette = "viridis")
   )
   expect_doppelganger(
     "Continuous fill scale",
     ggplot(iris, aes(Sepal.Width, Sepal.Length, fill = Petal.Length)) +
-      geom_raster() +
+      geom_tile() +
       scale_fill_ng_c(palette = "nwr")
   )
   expect_doppelganger(

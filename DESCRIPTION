@@ -1,7 +1,7 @@
 Package: ggforestplot
 Type: Package
 Title: Forestplots of Measures of Effects and Their Confidence Intervals
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person(
         "Ilari", "Scheinin", email = "ilari.scheinin@nightingalehealth.com",
@@ -10,6 +10,10 @@ Authors@R: c(
     person(
         "Maria", "Kalimeri", email = "maria.kalimeri@nightingalehealth.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6569-7553")
+    ),
+    person(
+        "Vilma", "Jagerroos", email = "vilma.jagerroos@nightingalehealth.com",
+        role = c("aut")
     ),
     person(
         "Juuso", "Parkkinen", email = "juuso.parkkinen@nightingalehealth.com",
@@ -37,7 +41,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     broom,
-    dplyr,
+    dplyr (>= 0.8.0),
     generics,
     ggplot2,
     ggplotify,
@@ -52,13 +56,14 @@ Imports:
     scales,
     stringr,
     survival,
-    tidyr
+    tidyr (>= 1.0.0)
 Suggests:
     knitr, 
     readr,
     rmarkdown,
     tidyverse,
-    testthat
+    testthat,
+    vdiffr
 Remotes: 
     github::thomasp85/patchwork
 License: MIT + file LICENSE

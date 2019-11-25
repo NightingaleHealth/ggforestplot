@@ -35,7 +35,7 @@ forestplot layout, a.k.a. blobbogram).
 The main plotting function is `ggforestplot::forestplot()` which will create a
 single-column forestplot of effects, given an input data frame. 
 
-In the package [webpage](https://nightingalehealth.github.io/ggforestplot/index.html), the two vignettes 
+The two vignettes 
 [Using ggforestplot](https://nightingalehealth.github.io/ggforestplot/articles/ggforestplot.html) and 
 [NMR data analysis tutorial](https://nightingalehealth.github.io/ggforestplot/articles/nmr-data-analysis-tutorial.html) 
 provide an introduction to creating forestplot visualizations with custom 
@@ -51,6 +51,9 @@ installed, you need to first install `devtools`):
 # install.packages("devtools")
 devtools::install_github("NightingaleHealth/ggforestplot")
 ```
+
+(Note: If dependencies are not installed automatically, try updating 
+`devtools`.)
 
 ## Examples
 
