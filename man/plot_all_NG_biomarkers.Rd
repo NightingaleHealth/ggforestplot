@@ -4,10 +4,25 @@
 \alias{plot_all_NG_biomarkers}
 \title{Print a Forestplot for All Nightingale Biomarkers}
 \usage{
-plot_all_NG_biomarkers(df, machine_readable_name = machine_readable_name,
-  name = name, estimate = estimate, se = se, pvalue = NULL,
-  colour = NULL, shape = NULL, logodds = FALSE, psignif = 0.05,
-  ci = 0.95, filename = "ng_all_biomarkers.pdf", xlims = NULL, ...)
+plot_all_NG_biomarkers(
+  df,
+  machine_readable_name = machine_readable_name,
+  name = NULL,
+  estimate = estimate,
+  se = se,
+  pvalue = NULL,
+  colour = NULL,
+  shape = NULL,
+  logodds = FALSE,
+  psignif = 0.05,
+  ci = 0.95,
+  filename = NULL,
+  paperwidth = 15,
+  paperheight = sqrt(2) * paperwidth,
+  xlims = NULL,
+  layout = "2020",
+  ...
+)
 }
 \arguments{
 \item{df}{A data frame with the data to plot. It must contain at least three
@@ -28,10 +43,11 @@ variable must be the same as in the \code{machine_readable_name} variable of
 (This argument is automatically \link[rlang:quotation]{quoted} and
 \link[rlang:eval_tidy]{evaluated} in the context of the \code{df} data frame.)}
 
-\item{name}{the variable in df with the Nightingale biomarker names to be
-displayed on the y-axis of the forestplot.
-(This argument is automatically \link[rlang:quotation]{quoted} and
-\link[rlang:eval_tidy]{evaluated} in the context of the \code{df} data frame.)}
+\item{name}{the variable in \code{df} that contains the y-axis
+names. If NULL, names from \code{\link{df_NG_biomarker_metadata}} are
+used. This argument is automatically \link[rlang:quotation]{quoted}
+and \link[rlang:eval_tidy]{evaluated} in the context of the \code{df} data frame.
+See Note.}
 
 \item{estimate}{the variable in \code{df} that contains the values (or log of
 values) to be displayed. This argument is automatically
@@ -75,11 +91,22 @@ confidence interval to be drawn.}
 
 \item{filename}{a character string giving the name of the file.}
 
+\item{paperwidth}{page width in inches}
+
+\item{paperheight}{page height in inches}
+
 \item{xlims}{NULL or a numeric vector of length 2 specifying the common x
 limits across all biomarker subgroups.}
 
+\item{layout}{one of the predefined layouts in \code{\link{df_grouping_all_NG_biomarkers}}
+or custom layout tibble following the example of predifined layouts}
+
 \item{...}{\code{ggplot2} graphical parameters such as \code{title},
-\code{ylab}, \code{xlab} e.t.c. to be passed along.}
+\code{ylab}, \code{xlab}, \code{xtickbreaks} etc. to be passed along.}
+}
+\value{
+If filename is NULL, a list of plot objects (one for each page
+in layout) is returned.
 }
 \description{
 Save a forestplot of all Nightingale biomarker associations in a 2-page,
@@ -109,19 +136,55 @@ df <-
     by = "name"
   )
 
-# Print effect sizes for all Nightingale biomarkers in a 2-page pdf
+# Print effect sizes for Nightingale biomarkers in a 2-page pdf
 plot_all_NG_biomarkers(
   df = df,
   machine_readable_name = machine_readable_name,
-  # Notice we don't need to define explicitly 'name' as a name variable is
-  # already present in df and picked up automatically as y-axis labels.
+  # Notice that when name is not defined explicitly, names from
+  # df_NG_biomarker_metadata are used
   estimate = beta,
   se = se,
   pvalue = pvalue,
   colour = trait,
   filename = "biomarker_linear_associations.pdf",
   xlab = "1-SD increment in BMI
-per 1-SD increment in biomarker concentration"
+per 1-SD increment in biomarker concentration",
+  layout = "2016"
+)
+
+# Custom layout can also be provided
+layout <- df_NG_biomarker_metadata \%>\%
+  dplyr::filter(
+    .data$group == "Fatty acids",
+    .data$machine_readable_name \%in\% df$machine_readable_name
+  ) \%>\%
+  dplyr::mutate(
+    group_custom = .data$subgroup,
+    column = dplyr::case_when(
+      .data$group_custom == "Fatty acids" ~ 1,
+      .data$group_custom == "Fatty acid ratios" ~ 2
+    ),
+    page = 1
+  ) \%>\%
+  dplyr::select(
+    .data$machine_readable_name,
+    .data$group_custom,
+    .data$column,
+    .data$page
+  )
+
+plot_all_NG_biomarkers(
+  df = df,
+  machine_readable_name = machine_readable_name,
+  # Notice that when name is not defined explicitly, names from
+  # df_NG_biomarker_metadata are used
+  estimate = beta,
+  se = se,
+  pvalue = pvalue,
+  colour = trait,
+  xlab = "1-SD increment in BMI
+per 1-SD increment in biomarker concentration",
+  layout = layout
 )
 
 # log odds for type 2 diabetes
@@ -144,20 +207,21 @@ df <-
     )
   )
 
-# Print effect sizes for all Nightingale biomarkers in a 2-page pdf
+# Print effect sizes for Nightingale biomarkers in a 2-page pdf
 plot_all_NG_biomarkers(
   df = df,
   machine_readable_name = machine_readable_name,
-  # Notice we don't need to define explicitly 'name' as a name variable is
-  # already present in df and picked up automatically as y-axis labels.
+  # Notice that when name is not defined explicitly, names from
+  # df_NG_biomarker_metadata are used
   estimate = beta,
   se = se,
   pvalue = pvalue,
   colour = study,
   logodds = TRUE,
   filename = "biomarker_t2d_associations.pdf",
-  xlab = "1-SD increment in BMI
-per 1-SD increment in biomarker concentration",
+  xlab = "Odds ratio for incident type 2 diabetes (95\% CI)
+per 1−SD increment in metabolite concentration",
+  layout = "2016",
   # Restrict limits as some studies are very weak and they take over the
   # overall range.
   xlims = c(0.5, 3.2)
@@ -166,5 +230,5 @@ per 1-SD increment in biomarker concentration",
 
 }
 \author{
-Maria Kalimeri, Ilari Scheinin
+Maria Kalimeri, Ilari Scheinin, Vilma Jagerroos
 }

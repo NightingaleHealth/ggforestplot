@@ -78,7 +78,7 @@ predefined layout (utilizes forestplot)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggforestplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -133,10 +133,25 @@ predefined layout (utilizes forestplot)." />
 predefined layout (utilizes <code><a href='forestplot.html'>forestplot</a></code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_all_NG_biomarkers</span>(<span class='no'>df</span>, <span class='kw'>machine_readable_name</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='no'>estimate</span>, <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>se</span>, <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>colour</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logodds</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>psignif</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>filename</span> <span class='kw'>=</span> <span class='st'>"ng_all_biomarkers.pdf"</span>, <span class='kw'>xlims</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>plot_all_NG_biomarkers</span>(
+  <span class='no'>df</span>,
+  <span class='kw'>machine_readable_name</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>,
+  <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='no'>estimate</span>,
+  <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>se</span>,
+  <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>colour</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>logodds</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>psignif</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>filename</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>paperwidth</span> <span class='kw'>=</span> <span class='fl'>15</span>,
+  <span class='kw'>paperheight</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fl'>2</span>) * <span class='no'>paperwidth</span>,
+  <span class='kw'>xlims</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>layout</span> <span class='kw'>=</span> <span class='st'>"2020"</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,10 +180,11 @@ variable must be the same as in the <code>machine_readable_name</code> variable 
     </tr>
     <tr>
       <th>name</th>
-      <td><p>the variable in df with the Nightingale biomarker names to be
-displayed on the y-axis of the forestplot.
-(This argument is automatically <a href='https://rlang.r-lib.org/reference/nse-defuse.html'>quoted</a> and
-<a href='https://rlang.r-lib.org/reference/eval_tidy.html'>evaluated</a> in the context of the <code>df</code> data frame.)</p></td>
+      <td><p>the variable in <code>df</code> that contains the y-axis
+names. If NULL, names from <code><a href='df_NG_biomarker_metadata.html'>df_NG_biomarker_metadata</a></code> are
+used. This argument is automatically <a href='https://rlang.r-lib.org/reference/nse-defuse.html'>quoted</a>
+and <a href='https://rlang.r-lib.org/reference/eval_tidy.html'>evaluated</a> in the context of the <code>df</code> data frame.
+See Note.</p></td>
     </tr>
     <tr>
       <th>estimate</th>
@@ -231,17 +247,34 @@ confidence interval to be drawn.</p></td>
       <td><p>a character string giving the name of the file.</p></td>
     </tr>
     <tr>
+      <th>paperwidth</th>
+      <td><p>page width in inches</p></td>
+    </tr>
+    <tr>
+      <th>paperheight</th>
+      <td><p>page height in inches</p></td>
+    </tr>
+    <tr>
       <th>xlims</th>
       <td><p>NULL or a numeric vector of length 2 specifying the common x
 limits across all biomarker subgroups.</p></td>
     </tr>
     <tr>
+      <th>layout</th>
+      <td><p>one of the predefined layouts in <code><a href='df_grouping_all_NG_biomarkers.html'>df_grouping_all_NG_biomarkers</a></code>
+or custom layout tibble following the example of predifined layouts</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p><code>ggplot2</code> graphical parameters such as <code>title</code>,
-<code>ylab</code>, <code>xlab</code> e.t.c. to be passed along.</p></td>
+<code>ylab</code>, <code>xlab</code>, <code>xtickbreaks</code> etc. to be passed along.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>If filename is NULL, a list of plot objects (one for each page
+in layout) is returned.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The function uses a custom grouping specified by
@@ -267,19 +300,55 @@ while another <code>df</code> variable may be used for y-axis labels, defined in
     <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"name"</span>
   )
 
-<span class='co'># Print effect sizes for all Nightingale biomarkers in a 2-page pdf</span>
+<span class='co'># Print effect sizes for Nightingale biomarkers in a 2-page pdf</span>
 <span class='fu'>plot_all_NG_biomarkers</span>(
   <span class='kw'>df</span> <span class='kw'>=</span> <span class='no'>df</span>,
   <span class='kw'>machine_readable_name</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>,
-  <span class='co'># Notice we don't need to define explicitly 'name' as a name variable is</span>
-  <span class='co'># already present in df and picked up automatically as y-axis labels.</span>
+  <span class='co'># Notice that when name is not defined explicitly, names from</span>
+  <span class='co'># df_NG_biomarker_metadata are used</span>
   <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='no'>beta</span>,
   <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>se</span>,
   <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='no'>pvalue</span>,
   <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>trait</span>,
   <span class='kw'>filename</span> <span class='kw'>=</span> <span class='st'>"biomarker_linear_associations.pdf"</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"1-SD increment in BMI
-per 1-SD increment in biomarker concentration"</span>
+per 1-SD increment in biomarker concentration"</span>,
+  <span class='kw'>layout</span> <span class='kw'>=</span> <span class='st'>"2016"</span>
+)
+
+<span class='co'># Custom layout can also be provided</span>
+<span class='no'>layout</span> <span class='kw'>&lt;-</span> <span class='no'>df_NG_biomarker_metadata</span> <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(
+    <span class='no'>.data</span>$<span class='no'>group</span> <span class='kw'>==</span> <span class='st'>"Fatty acids"</span>,
+    <span class='no'>.data</span>$<span class='no'>machine_readable_name</span> <span class='kw'>%in%</span> <span class='no'>df</span>$<span class='no'>machine_readable_name</span>
+  ) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(
+    <span class='kw'>group_custom</span> <span class='kw'>=</span> <span class='no'>.data</span>$<span class='no'>subgroup</span>,
+    <span class='kw'>column</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span>(
+      <span class='no'>.data</span>$<span class='no'>group_custom</span> <span class='kw'>==</span> <span class='st'>"Fatty acids"</span> ~ <span class='fl'>1</span>,
+      <span class='no'>.data</span>$<span class='no'>group_custom</span> <span class='kw'>==</span> <span class='st'>"Fatty acid ratios"</span> ~ <span class='fl'>2</span>
+    ),
+    <span class='kw'>page</span> <span class='kw'>=</span> <span class='fl'>1</span>
+  ) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(
+    <span class='no'>.data</span>$<span class='no'>machine_readable_name</span>,
+    <span class='no'>.data</span>$<span class='no'>group_custom</span>,
+    <span class='no'>.data</span>$<span class='no'>column</span>,
+    <span class='no'>.data</span>$<span class='no'>page</span>
+  )
+
+<span class='fu'>plot_all_NG_biomarkers</span>(
+  <span class='kw'>df</span> <span class='kw'>=</span> <span class='no'>df</span>,
+  <span class='kw'>machine_readable_name</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>,
+  <span class='co'># Notice that when name is not defined explicitly, names from</span>
+  <span class='co'># df_NG_biomarker_metadata are used</span>
+  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='no'>beta</span>,
+  <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>se</span>,
+  <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='no'>pvalue</span>,
+  <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>trait</span>,
+  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"1-SD increment in BMI
+per 1-SD increment in biomarker concentration"</span>,
+  <span class='kw'>layout</span> <span class='kw'>=</span> <span class='no'>layout</span>
 )
 
 <span class='co'># log odds for type 2 diabetes</span>
@@ -302,20 +371,21 @@ per 1-SD increment in biomarker concentration"</span>
     )
   )
 
-<span class='co'># Print effect sizes for all Nightingale biomarkers in a 2-page pdf</span>
+<span class='co'># Print effect sizes for Nightingale biomarkers in a 2-page pdf</span>
 <span class='fu'>plot_all_NG_biomarkers</span>(
   <span class='kw'>df</span> <span class='kw'>=</span> <span class='no'>df</span>,
   <span class='kw'>machine_readable_name</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>,
-  <span class='co'># Notice we don't need to define explicitly 'name' as a name variable is</span>
-  <span class='co'># already present in df and picked up automatically as y-axis labels.</span>
+  <span class='co'># Notice that when name is not defined explicitly, names from</span>
+  <span class='co'># df_NG_biomarker_metadata are used</span>
   <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='no'>beta</span>,
   <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>se</span>,
   <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='no'>pvalue</span>,
   <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>study</span>,
   <span class='kw'>logodds</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>filename</span> <span class='kw'>=</span> <span class='st'>"biomarker_t2d_associations.pdf"</span>,
-  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"1-SD increment in BMI
-per 1-SD increment in biomarker concentration"</span>,
+  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Odds ratio for incident type 2 diabetes (95% CI)
+per 1−SD increment in metabolite concentration"</span>,
+  <span class='kw'>layout</span> <span class='kw'>=</span> <span class='st'>"2016"</span>,
   <span class='co'># Restrict limits as some studies are very weak and they take over the</span>
   <span class='co'># overall range.</span>
   <span class='kw'>xlims</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>3.2</span>)
@@ -326,12 +396,13 @@ per 1-SD increment in biomarker concentration"</span>,
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
-    <p>Maria Kalimeri, Ilari Scheinin</p>
+    <p>Maria Kalimeri, Ilari Scheinin, Vilma Jagerroos</p>
   </div>
 </div>
 

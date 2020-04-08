@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggforestplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -131,8 +131,14 @@
     <p>Fit multiple regression models in one go.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>discovery_regression</span>(<span class='no'>df_long</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lm"</span>, <span class='st'>"glm"</span>, <span class='st'>"coxph"</span>), <span class='no'>formula</span>,
-  <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>key</span>, <span class='kw'>predictor</span> <span class='kw'>=</span> <span class='no'>predictor</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>discovery_regression</span>(
+  <span class='no'>df_long</span>,
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lm"</span>, <span class='st'>"glm"</span>, <span class='st'>"coxph"</span>),
+  <span class='no'>formula</span>,
+  <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>key</span>,
+  <span class='kw'>predictor</span> <span class='kw'>=</span> <span class='no'>predictor</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,10 +193,11 @@ fitting multiple outcomes.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with the following: a character variable with the same
+    <p>A data frame with the following columns: a character variable with the same
 name as the <code>key</code> parameter and numeric variables <code>estimate</code>,
 <code>se</code> and <code>pvalue</code> with the values of the respective variables
-of the linear model.</p>
+of the linear model. If <code>predictor</code> is factor, additional column
+<code>term</code> is returned indicating factor level of <code>predictor</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
@@ -201,20 +208,28 @@ of the linear model.</p>
 <span class='co'># ggforestplot::df_demo_metabolic_data</span>
 
 <span class='co'># Extract the names of the NMR biomarkers for discovery analysis</span>
-<span class='no'>nmr_biomarkers</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>df_demo_metabolic_data</span>)[<span class='fl'>7</span>:<span class='fl'>234</span>]
+<span class='no'>nmr_biomarkers</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>intersect</a></span>(
+  <span class='kw pkg'>ggforestplot</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/ggforestplot/man/df_NG_biomarker_metadata.html'>df_NG_biomarker_metadata</a></span>$<span class='no'>machine_readable_name</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>df_demo_metabolic_data</span>)
+)
 
 <span class='co'># Select only variables to be used for the model and collapse to a long</span>
 <span class='co'># format</span>
 <span class='no'>df_long</span> <span class='kw'>&lt;-</span>
   <span class='no'>df_demo_metabolic_data</span> <span class='kw'>%&gt;%</span>
   <span class='co'># Select only model variables</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>nmr_biomarkers</span>, <span class='no'>gender</span>, <span class='no'>BMI</span>) <span class='kw'>%&gt;%</span>
-  <span class='co'># log-tranform biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(~<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log1p</a></span>(<span class='no'>.</span>))) <span class='kw'>%&gt;%</span>
-  <span class='co'># Scale biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(~<span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>.</span>)))) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>all_of</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='no'>gender</span>, <span class='no'>BMI</span>) <span class='kw'>%&gt;%</span>
+  <span class='co'># Log-transform and scale biomarkers</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(
+    <span class='kw'>.vars</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>all_of</a></span>(<span class='no'>nmr_biomarkers</span>)),
+    <span class='kw'>.funs</span> <span class='kw'>=</span> ~ <span class='no'>.x</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log1p</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>()
+  ) <span class='kw'>%&gt;%</span>
   <span class='co'># Collapse to a long format</span>
-  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>biomarkervalue</span>, <span class='no'>nmr_biomarkers</span>)
+  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(
+    <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>,
+    <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>biomarkervalue</span>,
+    <span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>all_of</a></span>(<span class='no'>nmr_biomarkers</span>)
+  )
 
 <span class='no'>df_assoc_per_biomarker</span> <span class='kw'>&lt;-</span>
   <span class='fu'>discovery_regression</span>(
@@ -256,7 +271,10 @@ per 1-SD increment in BMI"</span>,
 <span class='co'># Logistic Regression Example</span>
 
 <span class='co'># Extract names of relevant NMR biomarkers</span>
-<span class='no'>nmr_biomarkers</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>df_demo_metabolic_data</span>)[<span class='fl'>7</span>:<span class='fl'>234</span>]
+<span class='no'>nmr_biomarkers</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/setops.html'>intersect</a></span>(
+  <span class='kw pkg'>ggforestplot</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/ggforestplot/man/df_NG_biomarker_metadata.html'>df_NG_biomarker_metadata</a></span>$<span class='no'>machine_readable_name</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>df_demo_metabolic_data</span>)
+)
 
 <span class='co'># Select only variables to be used for the model and</span>
 <span class='co'># collapse to a long format</span>
@@ -264,18 +282,22 @@ per 1-SD increment in BMI"</span>,
   <span class='no'>df_demo_metabolic_data</span> <span class='kw'>%&gt;%</span>
   <span class='co'># Select only model variables (avoid memory overhead)</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(
-    <span class='no'>nmr_biomarkers</span>,
+    <span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>all_of</a></span>(<span class='no'>nmr_biomarkers</span>),
     <span class='no'>gender</span>,
     <span class='no'>incident_diabetes</span>,
     <span class='no'>BMI</span>,
     <span class='no'>baseline_age</span>
   ) <span class='kw'>%&gt;%</span>
-  <span class='co'># log-tranform biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(~<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log1p</a></span>(<span class='no'>.</span>))) <span class='kw'>%&gt;%</span>
-  <span class='co'># Scale biomarkers</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(<span class='kw'>.vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nmr_biomarkers</span>), <span class='kw'>.funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(~<span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>.</span>)))) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate_all.html'>mutate_at</a></span>(
+    <span class='kw'>.vars</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/vars.html'>vars</a></span>(<span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>all_of</a></span>(<span class='no'>nmr_biomarkers</span>)),
+    <span class='kw'>.funs</span> <span class='kw'>=</span> ~ <span class='no'>.x</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log1p</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>()
+  ) <span class='kw'>%&gt;%</span>
   <span class='co'># Collapse to a long format</span>
-  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>biomarkervalue</span>, <span class='no'>nmr_biomarkers</span>)
+  <span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(
+    <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>machine_readable_name</span>,
+    <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>biomarkervalue</span>,
+    <span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>all_of</a></span>(<span class='no'>nmr_biomarkers</span>)
+  )
 
 <span class='no'>df_assoc_per_biomarker_gender</span> <span class='kw'>&lt;-</span>
   <span class='fu'>discovery_regression</span>(
@@ -292,7 +314,10 @@ per 1-SD increment in BMI"</span>,
 <span class='co'># Filter Nightingale metadata data frame for biomarkers of interest</span>
 <span class='no'>df_grouping</span> <span class='kw'>&lt;-</span>
   <span class='kw pkg'>ggforestplot</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/ggforestplot/man/df_NG_biomarker_metadata.html'>df_NG_biomarker_metadata</a></span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>group</span> <span class='kw'>%in%</span> <span class='st'>"Cholesterol"</span>)
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(
+    <span class='no'>group</span> <span class='kw'>%in%</span> <span class='st'>"Cholesterol"</span>,
+    !(<span class='no'>machine_readable_name</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"HDL2_C"</span>, <span class='st'>"HDL3_C"</span>))
+  )
 
 <span class='co'># Join the association data frame with the group data above</span>
 <span class='no'>df</span> <span class='kw'>&lt;-</span>
@@ -324,7 +349,7 @@ per 1-SD increment in biomarker concentration"</span>,
     </ul>
 
     <h2>Author</h2>
-    <p>Maria Kalimeri, Emmi Tikkanen, Juuso Parkkinen</p>
+    <p>Maria Kalimeri, Emmi Tikkanen, Juuso Parkkinen, Vilma Jagerroos</p>
   </div>
 </div>
 

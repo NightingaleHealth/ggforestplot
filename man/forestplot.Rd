@@ -4,9 +4,19 @@
 \alias{forestplot}
 \title{Draw a Forestplot of Measures of Effects}
 \usage{
-forestplot(df, name = name, estimate = estimate, se = se,
-  pvalue = NULL, colour = NULL, shape = NULL, logodds = FALSE,
-  psignif = 0.05, ci = 0.95, ...)
+forestplot(
+  df,
+  name = name,
+  estimate = estimate,
+  se = se,
+  pvalue = NULL,
+  colour = NULL,
+  shape = NULL,
+  logodds = FALSE,
+  psignif = 0.05,
+  ci = 0.95,
+  ...
+)
 }
 \arguments{
 \item{df}{A data frame with the data to plot. It must contain at least three
@@ -66,7 +76,7 @@ drawn with a hollow point.}
 confidence interval to be drawn.}
 
 \item{...}{\code{ggplot2} graphical parameters such as \code{title},
-\code{ylab}, \code{xlab} e.t.c. to be passed along.}
+\code{ylab}, \code{xlab}, \code{xtickbreaks} etc. to be passed along.}
 }
 \value{
 A \code{ggplot} object.
@@ -87,7 +97,7 @@ library(magrittr)
 df_linear <-
   df_linear_associations \%>\%
   dplyr::arrange(name) \%>\%
-  dplyr::filter(dplyr::row_number() < 30)
+  dplyr::filter(dplyr::row_number() <= 30)
 
 # Forestplot
 forestplot(
@@ -103,7 +113,7 @@ forestplot(
 df_logodds <-
   df_logodds_associations \%>\%
   dplyr::arrange(name) \%>\%
-  dplyr::filter(dplyr::row_number() < 30) \%>\%
+  dplyr::filter(dplyr::row_number() <= 30) \%>\%
   # Set the study variable to a factor to preserve order of appearance
   # Set class to factor to set order of display.
   dplyr::mutate(
@@ -132,21 +142,16 @@ forestplot(
   colour = study,
   shape = study,
   xlab = "Odds ratio for incident type 2 diabetes (95\% CI)
-  per 1-SD increment in biomarker concentration"
+  per 1-SD increment in biomarker concentration",
+  xlim = c(0.5, 2.2),
+  # You can explicitly define x-tick breaks
+  xtickbreaks = c(0.5, 0.8, 1.0, 1.2, 1.5, 2.0)
 ) +
-  ggplot2::coord_cartesian(xlim = c(0.5, 2.2)) +
   # You may also want to add a manual shape to mark meta-analysis with a
   # diamond shape
   ggplot2::scale_shape_manual(
     values = c(23L, 21L, 21L, 21L, 21L),
     labels = c("Meta-analysis", "NFBC-1997", "DILGOM", "FINRISK-1997", "YFS")
-  ) +
-  # Finally, you may want to have full control on the xtick locations, so you
-  # may define them explicitly by overwritting the existing
-  # 'scale_x_continuous()'
-  ggplot2::scale_x_continuous(
-    trans = "log10",
-    breaks = c(0.5, 0.8, 1.0, 1.2, 1.5, 2.0)
   )
 }
 \author{

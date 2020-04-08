@@ -7,19 +7,31 @@
 \alias{scale_fill_ng_c}
 \title{Colour scale constructor for Nightingale colours}
 \usage{
-scale_colour_ng_d(..., palette = "all", reverse = FALSE,
-  aesthetics = "colour")
+scale_colour_ng_d(..., palette = "all", reverse = FALSE, aesthetics = "colour")
 
-scale_fill_ng_d(..., palette = "all", reverse = FALSE,
-  aesthetics = "fill")
+scale_fill_ng_d(..., palette = "all", reverse = FALSE, aesthetics = "fill")
 
-scale_colour_ng_c(..., palette = "magma", reverse = FALSE,
-  values = NULL, space = "Lab", na.value = "grey50",
-  guide = "colourbar", aesthetics = "colour")
+scale_colour_ng_c(
+  ...,
+  palette = "magma",
+  reverse = FALSE,
+  values = NULL,
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "colour"
+)
 
-scale_fill_ng_c(..., palette = "magma", reverse = FALSE,
-  values = NULL, space = "Lab", na.value = "grey50",
-  guide = "colourbar", aesthetics = "fill")
+scale_fill_ng_c(
+  ...,
+  palette = "magma",
+  reverse = FALSE,
+  values = NULL,
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "fill"
+)
 }
 \arguments{
 \item{...}{Additional arguments passed to
@@ -39,7 +51,7 @@ useful, for example, to apply colour settings to the `colour` and
 
 \item{values}{if colours should not be evenly positioned along the gradient
 this vector gives the position (between 0 and 1) for each colour in the
-\code{colours} vector. See \code{\link[=rescale]{rescale()}} for a convenience function
+\code{colours} vector. See \code{\link[scales:rescale]{rescale()}} for a convenience function
 to map an arbitrary range to between 0 and 1.}
 
 \item{space}{colour space in which to calculate gradient. Must be "Lab" -
@@ -48,7 +60,7 @@ other values are deprecated.}
 \item{na.value}{Missing values will be replaced with this value.}
 
 \item{guide}{A function used to create a guide or its name. See
-\code{\link[=guides]{guides()}} for more info.}
+\code{\link[ggplot2:guides]{guides()}} for more info.}
 }
 \description{
 Colour scale constructor for Nightingale colours

@@ -52,8 +52,12 @@ already installed, you need to first install `devtools`):
 devtools::install_github("NightingaleHealth/ggforestplot")
 ```
 
-(Note: If dependencies are not installed automatically, try updating
-`devtools`.)
+If you want display package vignettes with `utils::vignette()`, install
+`ggforestplot` with
+`devtools::install_github("NightingaleHealth/ggforestplot",
+build_vignettes = TRUE)`. However, installing with building the
+vignettes takes little bit longer. (Note: If dependencies are not
+installed automatically, try updating `devtools`.)
 
 ## Examples
 
@@ -78,7 +82,7 @@ library(ggforestplot)
 df_linear <-
   ggforestplot::df_linear_associations %>%
   dplyr::arrange(name) %>%
-  dplyr::filter(dplyr::row_number() < 30)
+  dplyr::filter(dplyr::row_number() <= 30)
 
 # Forestplot
 forestplot(

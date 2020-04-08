@@ -13,13 +13,13 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", 
-  fig.width = 7, 
-  fig.height = 7, 
-  fig.align = "center")
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 7,
+  fig.align = "center"
+)
 library(tidyverse)
 library(ggforestplot)
-library(patchwork)
 ```
 
 ## Overview
@@ -41,6 +41,8 @@ installed, you need to install `devtools` first):
 devtools::install_github("NightingaleHealth/ggforestplot")
 ```
 
+If you want display package vignettes with `utils::vignette()`, install `ggforestplot` with `devtools::install_github("NightingaleHealth/ggforestplot", build_vignettes = TRUE)`. However, installing with building the vignettes takes little bit longer. (Note: If dependencies are not installed automatically, try updating `devtools`.)
+
 ## Usage 
 The main plotting function is `ggforestplot::forestplot()`. It's main input is 
 a data frame that contains the values and corresponding standard errors 
@@ -57,7 +59,7 @@ library(ggforestplot)
 # install.packages("tidyverse")
 library(tidyverse)
 
-# Filter only associations to BMI for the first 30 biomarkers of the example 
+# Filter only associations to BMI for the first 30 biomarkers of the example
 # dataset
 df <-
   ggforestplot::df_linear_associations %>%
@@ -66,10 +68,10 @@ df <-
     dplyr::row_number() <= 30
   )
 
-# Draw a forestplot of cross-sectional, linear associations 
+# Draw a forestplot of cross-sectional, linear associations
 ggforestplot::forestplot(
-  df = df, 
-  name = name, 
+  df = df,
+  name = name,
   estimate = beta,
   se = se
 )
@@ -87,9 +89,9 @@ linear associations of blood biomarkers to Body Mass Index (BMI), insulin resist
 first 10 rows.
 
 ```{r, tidy = FALSE}
-# Linear associations of blood biomarkers to Body Mass Index (BMI), insulin 
+# Linear associations of blood biomarkers to Body Mass Index (BMI), insulin
 # resistance (log(HOMA-IR)) and fasting glucose
-ggforestplot::df_linear_associations %>% 
+ggforestplot::df_linear_associations %>%
   print()
 ```
 
@@ -128,13 +130,13 @@ p-values of the linear regression, in this case the column `pvalue`.
 
 
 ```{r, tidy = FALSE, fig.height = 10}
-# Draw a forestplot of cross-sectional, linear associations 
-# Add a more descriptive x-label, a title and the threshold for statistical 
-# significance with Bonferroni correction. 
-# (Note that the df variable names 'name', 'beta' and 'se' do not really have to be 
+# Draw a forestplot of cross-sectional, linear associations
+# Add a more descriptive x-label, a title and the threshold for statistical
+# significance with Bonferroni correction.
+# (Note that the df variable names 'name', 'beta' and 'se' do not really have to be
 # explictly defined, as these are the default input values of these parameters.)
 ggforestplot::forestplot(
-  df = df, 
+  df = df,
   estimate = beta,
   pvalue = pvalue,
   psignif = 0.002,
@@ -152,33 +154,32 @@ resistance (HOMA-IR) and fasting glucose.
 
 ```{r, tidy = FALSE, fig.height = 11}
 # Extract the biomarker names
-selected_bmrs <-
-  df %>% 
-  pull(name)
+selected_bmrs <- df %>% pull(name)
 
 # Filter the demo dataset for the biomarkers above and all three traits:
 # BMI, HOMA-IR and fasting glucose
-df_compare_traits <- 
-  ggforestplot::df_linear_associations %>% 
-  filter(name %in% selected_bmrs)  %>% 
-  # Set class to factor to set order of display. 
+df_compare_traits <-
+  ggforestplot::df_linear_associations %>%
+  filter(name %in% selected_bmrs) %>%
+  # Set class to factor to set order of display.
   mutate(
-     trait = factor(
-     trait, 
-     levels = c("BMI", "HOMA-IR", "Fasting glucose"))
-  ) 
+    trait = factor(
+      trait,
+      levels = c("BMI", "HOMA-IR", "Fasting glucose")
+    )
+  )
 
-# Draw a forestplot of cross-sectional, linear associations 
+# Draw a forestplot of cross-sectional, linear associations
 # Notice how the df variable 'trait' is used here to color the points
 ggforestplot::forestplot(
-  df = df_compare_traits, 
+  df = df_compare_traits,
   estimate = beta,
   pvalue = pvalue,
   psignif = 0.002,
   xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
   title = "Biomarker associations to metabolic traits",
   colour = trait
-) 
+)
 ```
 
 ### Grouping the biomarkers 
@@ -188,23 +189,19 @@ readability of the plot.
 
 The package includes also a data frame, `ggforestplot::df_NG_biomarker_metadata`, 
 with metadata on the Nightingale blood biomarkers, such as different naming options,
-descriptions, group/sugroup information and units of measurement. We will use 
+descriptions, and group/sugroup information. We will use 
 the grouping information in this data frame to plot the 30 biomarkers above in 
 a grouped layout. 
 
-We can acheive this by joining the biomarker metadata with the data frame 
-`df_compare_traits` above, that contains the associations. We will then use 
-a combination of the functions `tidyr::nest()` and `purrr::map2()` in order 
-to run the forestplot function for each of the groups separately. Finally, 
-we will use the `patchwork::wrap_plots()` functions to assemble the final 
-forestplot. The steps to do this are shown below.
+We can achieve this by joining the biomarker metadata with the data frame 
+`df_compare_traits` above, that contains the associations. We will then use `ggforce::facet_col` to facet by group.
 
 ```{r, tidy = FALSE, fig.height = 12}
-# Install and attach the patchwork library
-# devtools::install_github("thomasp85/patchwork")
-library(patchwork)
+# Install and attach the ggforce library
+# install.packages("ggforce")
+library(ggforce)
 
-# Filter df_NG_biomarker_metadata, that contain the groups, for only the 30 
+# Filter df_NG_biomarker_metadata, that contain the groups, for only the 30
 # biomarkers under discussion
 df_grouping <-
   df_NG_biomarker_metadata %>%
@@ -213,52 +210,27 @@ df_grouping <-
 # Join the association data frame df_compare_traits with group data
 df_compare_traits_groups <-
   df_compare_traits %>%
-  # use right_join, with df_grouping on the right, to preserve the order of 
-  # biomarkers it specifies. 
-  dplyr::right_join(., df_grouping, by = "name") 
-
-# Draw a forestplot of cross-sectional, linear associations.
-ggplot_multi <-
-  df_compare_traits_groups %>%
-  nest(-group, .key = "data") %>%
-  # Apply forestplot to each group 
-  mutate(
-    gg_groups = purrr::map2(
-      data, group, ~ forestplot(
-        df = .x,
-        estimate = beta,
-        pvalue = pvalue,
-        psignif = 0.002,
-        xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
-        colour = trait,
-        title = .y
-      ) +
-        ggplot2::coord_cartesian(xlim = c(-0.3, 0.4))
-    ),
-    # Optional: remove x-axis and legend for all plots except the bottom one
-    gg_groups = ifelse(
-      test = row_number() != n(),
-      yes =
-        purrr::map(gg_groups, ~ . +
-          theme(
-            axis.text.x = element_blank(),
-            axis.title.x = element_blank(),
-            axis.ticks.x = element_blank(),
-            plot.margin = unit(c(1, 2, 1, 2), "mm")
-          ) +
-          ggplot2::theme(legend.position = "none")),
-      no = gg_groups
-    ),
-    rel_heights = purrr::map(
-      data,  ~ nrow(.) 
-    ) %>% unlist()
+  # use right_join, with df_grouping on the right, to preserve the order of
+  # biomarkers it specifies.
+  dplyr::right_join(., df_grouping, by = "name") %>%
+  dplyr::mutate(
+    group = factor(.data$group, levels = unique(.data$group))
   )
 
-patchwork::wrap_plots(
-  ggplot_multi$gg_groups,
-  ncol = 1, 
-  heights = ggplot_multi$rel_heights
-)
+# Draw a forestplot of cross-sectional, linear associations.
+forestplot(
+  df = df_compare_traits_groups,
+  estimate = beta,
+  pvalue = pvalue,
+  psignif = 0.002,
+  xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
+  colour = trait
+) +
+  ggforce::facet_col(
+    facets = ~group,
+    scales = "free_y",
+    space = "free"
+  )
 ```
 
 Notice above, how the order of the biomarkers is now different than in the previous
@@ -267,7 +239,7 @@ plots. This is the order of groups and biomarkers in `df_grouping`.
 ```{r, tidy = FALSE}
 #  Print the first 10 rows of df_grouping to inspect the order of biomarkers
 df_grouping %>%
-  pull(name) %>% 
+  pull(name) %>%
   print()
 ```
 
@@ -293,7 +265,7 @@ reports the cohorts sample size.
 
 ```{r, tidy = FALSE}
 #  Odds Ratios of Blood Biomarkers with Incident Type 2 Diabetes
-ggforestplot::df_logodds_associations %>% 
+ggforestplot::df_logodds_associations %>%
   print()
 ```
 
@@ -307,21 +279,23 @@ for amino acids.
 ```{r, tidy = FALSE, fig.height = 6}
 # Filter df_NG_biomarker_metadata for only amino acids
 df_grouping <-
-  df_NG_biomarker_metadata %>% 
-  filter(group %in% "Amino acids") 
+  df_NG_biomarker_metadata %>%
+  filter(group %in% "Amino acids")
 
 # Join the association data frame with group data
 df <-
   df_logodds_associations %>%
   # Set the study variable to a factor to preserve order of appearance
-    mutate(
-     study = factor(
-     study, 
-     levels = c("Meta-analysis", "NFBC-1997", "DILGOM", "FINRISK-1997", "YFS"))
-  ) %>% 
-  # use right_join, with df_grouping on the right, to preserve the order of 
-  # biomarkers it specifies. 
-  dplyr::right_join(., df_grouping, by = "name") 
+  mutate(
+    study = factor(
+      study,
+      levels = c("Meta-analysis", "NFBC-1997", "DILGOM", "FINRISK-1997", "YFS")
+    )
+  ) %>%
+  # use right_join, with df_grouping on the right, to preserve the order of
+  # biomarkers it specifies.
+  dplyr::right_join(., df_grouping, by = "name") %>%
+  tidyr::drop_na(.data$beta)
 
 # Draw a forestplot of odds ratios
 ggforestplot::forestplot(
@@ -342,8 +316,8 @@ Notice that the additional parameter set here is `logodds = TRUE`.
 What happens, in this case, is that the `beta` values are exponentiated and 
 plotted in a logarithmic scale. The confidence intervals for the odds ratios are 
 estimated by default, using the standard errors of the log odds ratios, as follows 
-$\text{CI}_\text{low} = \exp(\beta - 0.95 * \text{SE})$ and 
-$\text{CI}_\text{high} = \exp(\beta - 0.95 * \text{SE})$. If you wish to use some 
+$\text{CI}_\text{low} = \exp(\beta - 1.96 * \text{SE})$ and 
+$\text{CI}_\text{high} = \exp(\beta + 1.96 * \text{SE})$. If you wish to use some 
 confidence interval other than the 95%, you may specify this in the parameter `ci`
 of the function (see below).
 
@@ -364,7 +338,7 @@ ggforestplot::forestplot(
   xlab = "Odds ratio for incident type 2 diabetes (95% CI)\nper 1−SD increment in metabolite concentration",
   title = "Amino acids",
   logodds = TRUE
-) + 
+) +
   ggplot2::scale_shape_manual(
     values = c(23L, 21L, 21L, 21L, 21L),
     labels = c("Meta-analysis", "NFBC-1997", "DILGOM", "FINRISK-1997", "YFS")
@@ -372,14 +346,12 @@ ggforestplot::forestplot(
 ```
 
 
-Finally, the `ggforestplot` package offers a custom function that plots and 
-prints in a 2-page pdf file all Nightingale blood biomarkers, namely 
-`plot_all_NG_biomarkers()`. It's usage is straightforward.
+Finally, the `ggforestplot` package provides a custom function that plots and prints all Nightingale blood biomarkers in a single pdf file, called `plot_all_NG_biomarkers()`. There are two layouts available for 2016 and 2020 versions of the biomarker platform. Alternatively, one can also input a custom layout. Its usage is straightforward.
 
 ```{r, tidy = FALSE, eval = FALSE}
 # Join the built-in association demo dataset with a variable that contains
 # the machine readable names of Nightingale biomarkers. (Note: if you
-# have built your association data frame using the Nightingale CSV result file, 
+# have built your association data frame using the Nightingale CSV result file,
 # then your data frame should already contain machine readable names.)
 df <-
   df_linear_associations %>%
@@ -389,28 +361,41 @@ df <-
       name,
       machine_readable_name
     ),
-    by = "name")
+    by = "name"
+  )
 
 # Print effect sizes for all Nightingale biomarkers in a custom 2-page pdf
-plot_all_NG_biomarkers(
+p <- plot_all_NG_biomarkers(
   df = df,
   machine_readable_name = machine_readable_name,
   estimate = beta,
   se = se,
   pvalue = pvalue,
   colour = trait,
-  filename = "biomarker_linear_associations.pdf",
-  xlab = "1-SD increment in BMI\nper 1-SD increment in biomarker concentration"
+  layout = "2016",
+  xlab = "1-SD increment in cardiometabolic trait
+  per 1-SD increment in biomarker concentration"
 )
+
+# Results are missing for glucose, remove NA from legend
+p <- purrr::map(
+  .x = p,
+  .f = ~ .x + ggforestplot::scale_colour_ng_d(na.translate = FALSE)
+)
+
+grDevices::pdf("biomarker_linear_associations.pdf", 15, sqrt(2) * 15)
+p
+grDevices::dev.off()
+
 ```
 
 ```{r, tidy = FALSE, include = FALSE, eval = FALSE}
-# ------------> Evaluate this only when you want to refresh the pdf plots in 
-# ------------> figures/ Don't update them everytime if not necessary as git 
-# ------------> saves multiple copies. 
+# ------------> Evaluate this only when you want to refresh the pdf plots in
+# ------------> figures/ Don't update them everytime if not necessary as git
+# ------------> saves multiple copies.
 # Join the built-in association demo dataset with a variable that contains
 # the machine readable names of Nightingale biomarkers. (Note: if you
-# have built your association data frame using the Nightingale CSV result file, 
+# have built your association data frame using the Nightingale CSV result file,
 # then your data frame should already contain machine readable names.)
 df <-
   df_linear_associations %>%
@@ -420,19 +405,31 @@ df <-
       name,
       machine_readable_name
     ),
-    by = "name")
+    by = "name"
+  )
 
 # Print effect sizes for all Nightingale biomarkers in a custom 2-page pdf
-plot_all_NG_biomarkers(
+p <- plot_all_NG_biomarkers(
   df = df,
   machine_readable_name = machine_readable_name,
   estimate = beta,
   se = se,
   pvalue = pvalue,
   colour = trait,
-  filename = "figures/biomarker_linear_associations.pdf",
-  xlab = "1-SD increment in BMI\nper 1-SD increment in biomarker concentration"
+  layout = "2016",
+  xlab = "1-SD increment in cardiometabolic trait
+  per 1-SD increment in biomarker concentration"
 )
+
+# Results are missing for glucose, remove NA from legend
+p <- purrr::map(
+  .x = p,
+  .f = ~ .x + ggforestplot::scale_colour_ng_d(na.translate = FALSE)
+)
+
+grDevices::pdf("figures/biomarker_linear_associations.pdf", 15, sqrt(2) * 15)
+p
+grDevices::dev.off()
 ```
 
-You may view the output of this function [here](https://github.com/NightingaleHealth/ggforestplot/blob/master/vignettes/figures/biomarker_linear_associations.pdf)
+You may view the output of this function [here](https://github.com/NightingaleHealth/ggforestplot/blob/master/vignettes/figures/biomarker_linear_associations.pdf).

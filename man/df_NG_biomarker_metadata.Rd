@@ -4,7 +4,7 @@
 \name{df_NG_biomarker_metadata}
 \alias{df_NG_biomarker_metadata}
 \title{Information and Grouping for Nightingale's Blood Biomarkers}
-\format{A data frame (tibble) with 228 rows and 7 columns:
+\format{A data frame (tibble) with 252 rows and 8 columns:
 \describe{
   \item{abbreviation}{Biomarker abbreviation, i.e. the one delivered with the
   xlsx data format.}
@@ -15,7 +15,7 @@
   \item{description}{Biomarker description.}
   \item{group}{The group the biomarker belongs to.}
   \item{subgroup}{The subgroup the biomarker belongs to.}
-  \item{unit}{The unit of measurement for the respective biomarker.}
+  \item{unit}{Unit is deprecated. Use the units delivered with biomarkers.}
 }}
 \source{
 Nightingale Health Ltd. \url{https://nightingalehealth.com/}
