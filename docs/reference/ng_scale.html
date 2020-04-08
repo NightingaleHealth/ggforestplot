@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggforestplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -131,19 +131,31 @@
     <p>Colour scale constructor for Nightingale colours</p>
     </div>
 
-    <pre class="usage"><span class='fu'>scale_colour_ng_d</span>(<span class='no'>...</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"colour"</span>)
+    <pre class="usage"><span class='fu'>scale_colour_ng_d</span>(<span class='no'>...</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"colour"</span>)
 
-<span class='fu'>scale_fill_ng_d</span>(<span class='no'>...</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"fill"</span>)
+<span class='fu'>scale_fill_ng_d</span>(<span class='no'>...</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"fill"</span>)
 
-<span class='fu'>scale_colour_ng_c</span>(<span class='no'>...</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"magma"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>space</span> <span class='kw'>=</span> <span class='st'>"Lab"</span>, <span class='kw'>na.value</span> <span class='kw'>=</span> <span class='st'>"grey50"</span>,
-  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='st'>"colourbar"</span>, <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"colour"</span>)
+<span class='fu'>scale_colour_ng_c</span>(
+  <span class='no'>...</span>,
+  <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"magma"</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>space</span> <span class='kw'>=</span> <span class='st'>"Lab"</span>,
+  <span class='kw'>na.value</span> <span class='kw'>=</span> <span class='st'>"grey50"</span>,
+  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='st'>"colourbar"</span>,
+  <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"colour"</span>
+)
 
-<span class='fu'>scale_fill_ng_c</span>(<span class='no'>...</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"magma"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>space</span> <span class='kw'>=</span> <span class='st'>"Lab"</span>, <span class='kw'>na.value</span> <span class='kw'>=</span> <span class='st'>"grey50"</span>,
-  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='st'>"colourbar"</span>, <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"fill"</span>)</pre>
+<span class='fu'>scale_fill_ng_c</span>(
+  <span class='no'>...</span>,
+  <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"magma"</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>values</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>space</span> <span class='kw'>=</span> <span class='st'>"Lab"</span>,
+  <span class='kw'>na.value</span> <span class='kw'>=</span> <span class='st'>"grey50"</span>,
+  <span class='kw'>guide</span> <span class='kw'>=</span> <span class='st'>"colourbar"</span>,
+  <span class='kw'>aesthetics</span> <span class='kw'>=</span> <span class='st'>"fill"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,7 +187,7 @@ useful, for example, to apply colour settings to the `colour` and
       <th>values</th>
       <td><p>if colours should not be evenly positioned along the gradient
 this vector gives the position (between 0 and 1) for each colour in the
-<code>colours</code> vector. See <code>rescale()</code> for a convenience function
+<code>colours</code> vector. See <code><a href='https://scales.r-lib.org//reference/rescale.html'>rescale()</a></code> for a convenience function
 to map an arbitrary range to between 0 and 1.</p></td>
     </tr>
     <tr>
@@ -190,7 +202,7 @@ other values are deprecated.</p></td>
     <tr>
       <th>guide</th>
       <td><p>A function used to create a guide or its name. See
-<code>guides()</code> for more info.</p></td>
+<code><a href='https://ggplot2.tidyverse.org/reference/guides.html'>guides()</a></code> for more info.</p></td>
     </tr>
     </table>
 

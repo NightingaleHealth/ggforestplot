@@ -50,7 +50,7 @@
 #' @param ci A number between 0 and 1 (defaults to 0.95) indicating the type of
 #' confidence interval to be drawn.
 #' @param ... \code{ggplot2} graphical parameters such as \code{title},
-#' \code{ylab}, \code{xlab} e.t.c. to be passed along.
+#' \code{ylab}, \code{xlab}, \code{xtickbreaks} etc. to be passed along.
 #' @return A \code{ggplot} object.
 #' @note  See \code{vignette(programming, package = "dplyr")} for an
 #' introduction to non-standard evaluation.
@@ -71,7 +71,7 @@
 #' df_linear <-
 #'   df_linear_associations %>%
 #'   dplyr::arrange(name) %>%
-#'   dplyr::filter(dplyr::row_number() < 30)
+#'   dplyr::filter(dplyr::row_number() <= 30)
 #'
 #' # Forestplot
 #' forestplot(
@@ -87,7 +87,7 @@
 #' df_logodds <-
 #'   df_logodds_associations %>%
 #'   dplyr::arrange(name) %>%
-#'   dplyr::filter(dplyr::row_number() < 30) %>%
+#'   dplyr::filter(dplyr::row_number() <= 30) %>%
 #'   # Set the study variable to a factor to preserve order of appearance
 #'   # Set class to factor to set order of display.
 #'   dplyr::mutate(
@@ -116,21 +116,16 @@
 #'   colour = study,
 #'   shape = study,
 #'   xlab = "Odds ratio for incident type 2 diabetes (95% CI)
-#'   per 1-SD increment in biomarker concentration"
+#'   per 1-SD increment in biomarker concentration",
+#'   xlim = c(0.5, 2.2),
+#'   # You can explicitly define x-tick breaks
+#'   xtickbreaks = c(0.5, 0.8, 1.0, 1.2, 1.5, 2.0)
 #' ) +
-#'   ggplot2::coord_cartesian(xlim = c(0.5, 2.2)) +
 #'   # You may also want to add a manual shape to mark meta-analysis with a
 #'   # diamond shape
 #'   ggplot2::scale_shape_manual(
 #'     values = c(23L, 21L, 21L, 21L, 21L),
 #'     labels = c("Meta-analysis", "NFBC-1997", "DILGOM", "FINRISK-1997", "YFS")
-#'   ) +
-#'   # Finally, you may want to have full control on the xtick locations, so you
-#'   # may define them explicitly by overwritting the existing
-#'   # 'scale_x_continuous()'
-#'   ggplot2::scale_x_continuous(
-#'     trans = "log10",
-#'     breaks = c(0.5, 0.8, 1.0, 1.2, 1.5, 2.0)
 #'   )
 
 forestplot <- function(df,
@@ -159,6 +154,8 @@ forestplot <- function(df,
   pvalue <- enquo(pvalue)
   colour <- enquo(colour)
   shape <- enquo(shape)
+  
+  args <- list(...)
 
   # TODO: Allow color instead of colour. This will do it, but also breaks other
   # options at the end, so fix those before uncommenting this.
@@ -220,12 +217,21 @@ forestplot <- function(df,
 
   # If logodds, adjust axis scale
   if (logodds) {
-    g <-
-      g +
-      scale_x_continuous(
-        trans = "log10",
-        breaks = scales::log_breaks(n = 7)
-      )
+    if ("xtickbreaks" %in% names(args)) {
+      g <-
+        g +
+        scale_x_continuous(
+          trans = "log10",
+          breaks = args$xtickbreaks
+        )
+    } else {
+      g <-
+        g +
+        scale_x_continuous(
+          trans = "log10",
+          breaks = scales::log_breaks(n = 7)
+        )
+    }
   }
 
   g <-
@@ -309,7 +315,6 @@ forestplot <- function(df,
   # }
 
   # Pass through graphical parameters and define defaults values for some.
-  args <- list(...)
   if ("title" %in% names(args)) {
     g <- g + labs(title = args$title)
   }
@@ -331,6 +336,9 @@ forestplot <- function(df,
   }
   if ("ylim" %in% names(args)) {
     g <- g + ylim(args$ylim)
+  }
+  if ("xtickbreaks" %in% names(args) & !logodds) {
+    g <- g + scale_x_continuous(breaks = args$xtickbreaks)
   }
   g
 }

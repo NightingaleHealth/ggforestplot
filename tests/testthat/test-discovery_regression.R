@@ -3,7 +3,10 @@ context("discovery_regression")
 library(magrittr)
 
 # Extract names of relevant NMR biomarkers
-nmr_biomarkers <- names(df_demo_metabolic_data)[7:234]
+nmr_biomarkers <- dplyr::intersect(
+  colnames(df_demo_metabolic_data),
+  df_NG_biomarker_metadata$machine_readable_name
+)
 
 test_that(
   "discovery_regression returns expected output for linear regression", {
@@ -12,25 +15,19 @@ test_that(
   df_long <-
     df_demo_metabolic_data %>%
     # Select only model variables
-    dplyr::select(nmr_biomarkers, gender, BMI) %>%
-    # log-tranform biomarkers
+    dplyr::select(.data$gender, .data$BMI, dplyr::one_of(nmr_biomarkers)) %>%
+    # log-tranform and scale biomarkers
     dplyr::mutate_at(
-      .vars = c(nmr_biomarkers),
-      .funs = ~ log1p(.)) %>%
-    # Scale biomarkers
-    dplyr::mutate_at(
-      .vars = c(nmr_biomarkers),
-      .funs = ~ as.numeric(scale(.))) %>%
+      .vars = dplyr::vars(nmr_biomarkers),
+      .funs = ~ .x %>% log1p() %>% scale() %>% as.numeric()
+    ) %>%
     # Collapse to a long format
     tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
 
   df_assoc_per_biomarker <-
     discovery_regression(
       df_long = df_long,
-      formula =
-        formula(
-          biomarkervalue ~ BMI + factor(gender)
-        ),
+      formula = formula(biomarkervalue ~ BMI + factor(gender)),
       key = "biomarkerid",
       predictor = "BMI",
       model = "lm"
@@ -47,11 +44,11 @@ test_that(
 
   val <-
     df_assoc_per_biomarker %>%
-    filter(biomarkerid == "Esterified_C") %>%
+    filter(biomarkerid == "Total_CE") %>%
     pull(estimate) %>%
     round(4)
 
-  expect_equal(val , 0.028)
+  expect_equal(val , 0.0342)
 
   expect_message(
     discovery_regression(
@@ -81,16 +78,14 @@ test_that("discovery_regression returns expected output for cox regression", {
     df_demo_metabolic_data %>%
     # Select only model variables
     dplyr::select(
-      nmr_biomarkers, gender, baseline_age, age_at_diabetes, incident_diabetes
+      .data$gender, .data$baseline_age,
+      .data$age_at_diabetes, .data$incident_diabetes,
+      dplyr::one_of(nmr_biomarkers)
     ) %>%
-    # log-tranform biomarkers
+    # log-tranform and scale biomarkers
     dplyr::mutate_at(
-      .vars = c(nmr_biomarkers), .funs = ~ log1p(.)
-    ) %>%
-    # Scale biomarkers
-    dplyr::mutate_at(
-      .vars = c(nmr_biomarkers),
-      .funs = ~ as.numeric(scale(.))
+      .vars = dplyr::vars(nmr_biomarkers),
+      .funs = ~ .x %>% log1p() %>% scale() %>% as.numeric()
     ) %>%
     # Collapse to a long format
     tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
@@ -122,11 +117,11 @@ test_that("discovery_regression returns expected output for cox regression", {
 
   val <-
     df_assoc_per_biomarker_diab %>%
-    filter(biomarkerid == "Esterified_C") %>%
+    filter(biomarkerid == "Total_CE") %>%
     pull(estimate) %>%
     round(4)
 
-  expect_equal(val, 0.3141)
+  expect_equal(val, 0.0534)
 })
 
 test_that(
@@ -137,16 +132,11 @@ test_that(
   df_long <-
     df_demo_metabolic_data %>%
     # Select only model variables (avoid memory overhead)
-    dplyr::select(nmr_biomarkers, gender) %>%
-    # log-tranform biomarkers
+    dplyr::select(.data$gender, dplyr::one_of(nmr_biomarkers)) %>%
+    # log-tranform and scale biomarkers
     dplyr::mutate_at(
-      .vars = c(nmr_biomarkers),
-      .funs = ~ log1p(.)
-    ) %>%
-    # Scale biomarkers
-    dplyr::mutate_at(
-      .vars = c(nmr_biomarkers),
-      .funs = ~ as.numeric(scale(.))
+      .vars = dplyr::vars(nmr_biomarkers),
+      .funs = ~ .x %>% log1p() %>% scale() %>% as.numeric()
     ) %>%
     # Collapse to a long format
     tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
@@ -154,10 +144,7 @@ test_that(
   df_assoc_per_biomarker_gender <-
     discovery_regression(
       df_long = df_long,
-      formula =
-        formula(
-          factor(gender) ~ biomarkervalue
-        ),
+      formula = formula(factor(gender) ~ biomarkervalue),
       key = "biomarkerid",
       predictor = "biomarkervalue",
       model = "glm"
@@ -174,11 +161,11 @@ test_that(
 
   val <-
     df_assoc_per_biomarker_gender %>%
-    filter(biomarkerid == "Esterified_C") %>%
+    filter(biomarkerid == "Total_CE") %>%
     pull(estimate) %>%
     round(4)
 
-  expect_equal(val , -0.0934)
+  expect_equal(val , -0.0702)
 
   # Check you get errors when ...
   expect_error(
@@ -206,3 +193,37 @@ test_that(
   )
 })
 
+test_that(
+  "discovery_regression returns expected output for linear regression with factor predictor",
+  {
+    df_long <- tibble::tibble(
+      name = c(rep("a", 3), rep("b", 3)),
+      x = factor(rep(1:3, 2)),
+      y = c(1:3, seq(from = 1, to = 5, by = 2))
+    )
+    
+    df_assoc <-
+      discovery_regression(
+        df_long = df_long,
+        formula = formula(y ~ x),
+        key = "name",
+        predictor = "x",
+        model = "lm"
+      )
+    
+    expect_output(
+      str(df_assoc),
+      "5 variables"
+    )
+    
+    expect_true(
+      all(df_assoc$name %in% df_long$name)
+    )
+    
+    expect_true(
+      all(df_assoc$term %in% paste0("x", levels(df_long$x)[-1]))
+    )
+    
+    expect_equal(df_assoc$estimate, c(1, 2, 2, 4))
+  }
+)

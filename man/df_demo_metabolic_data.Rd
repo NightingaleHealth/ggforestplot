@@ -4,7 +4,7 @@
 \name{df_demo_metabolic_data}
 \alias{df_demo_metabolic_data}
 \title{Simulated Metabolic Data}
-\format{A data frame (tibble) with 1887 rows and 234 columns. \code{id} is a
+\format{A data frame (tibble) with 1887 rows and 256 columns. \code{id} is a
 character variable with the ID number of fictional individual; \code{gender}
 is a character variable with the gender information on each individual;
 \code{baseline_age} is a numeric variable with the age at the time of
@@ -23,7 +23,7 @@ df_demo_metabolic_data
 \description{
 A simulated, demo data frame that contains metabolic profiles, basic
 information and diabetes outcomes for 1887 fictional individuals. The data frame
-contains values for 228 serum biomarkers quantified by the NMR platform of
+contains values for 250 serum biomarkers quantified by the NMR platform of
 Nightingale Health Ltd.
 }
 \seealso{

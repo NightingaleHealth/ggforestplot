@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggforestplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -130,6 +130,45 @@
 <a href="#ggforestplot-0-0-1" class="anchor"></a>ggforestplot 0.0.1</h1>
 <p>Initial GitHub release</p>
 </div>
+    <div id="ggforestplot-0-0-2" class="section level1">
+<h1 class="page-header">
+<a href="#ggforestplot-0-0-2" class="anchor"></a>ggforestplot 0.0.2</h1>
+<div id="minor-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-changes" class="anchor"></a>Minor changes</h2>
+<ul>
+<li>Change tick breaks algorithm in <code><a href="../reference/forestplot.html">forestplot()</a></code> when <code>logodds = TRUE</code> with an example for explicit definition of tick marks.</li>
+<li>Correct typos in vignettes.</li>
+<li>Updates for tidyr 1.0.0</li>
+<li>Updates for dplyr 0.8.3</li>
+</ul>
+</div>
+</div>
+    <div id="ggforestplot-0-1-0" class="section level1">
+<h1 class="page-header">
+<a href="#ggforestplot-0-1-0" class="anchor"></a>ggforestplot 0.1.0</h1>
+<div id="changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes" class="anchor"></a>Changes</h2>
+<ul>
+<li>
+<code><a href="../reference/plot_all_NG_biomarkers.html">plot_all_NG_biomarkers()</a></code> accepts now layout as an input parameter. Layout can be one of predefined layouts in <code>df_grouping_all_NG_biomarkers</code> or a user provided <code>tibble</code>.</li>
+<li>
+<code><a href="../reference/forestplot.html">forestplot()</a></code> takes also x-tick breaks as an input parameter.</li>
+<li>
+<code><a href="../reference/discovery_regression.html">discovery_regression()</a></code> accepts factor predictors. In this case an additional column with term is returned.</li>
+<li>
+<code>df_NG_biomarker_metadata</code> updated to include new platform biomarkers. <code>unit</code> column is set to “deprecated” since different quantification versions can have different units. Users interested in plotting their biomarker data should read units from their own files.</li>
+<li>
+<code>df_grouping_all_NG_biomarkers</code> was updated to contain layouts for 2016 and 2020 Nighitingale Heath Ltd. platforms.</li>
+<li>
+<code>df_linear_associations</code> and <code>df_logodds_associations</code> where updated with new names for some biomarkers.</li>
+<li>
+<code>df_demo_metabolomic_data</code>, <code>data-raw/metabolomics_data.zip</code> and the same data in <code>vignettes/data</code> was updated to include new biomarkers.</li>
+<li>Vignettes updated to reflect the number of biomarkers in current 2020 platform, while <code><a href="https://ggforce.data-imaginist.com/reference/facet_row.html">ggforce::facet_col()</a></code> is used in examples instead of <code><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">patchwork::wrap_plots()</a></code>.</li>
+</ul>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -137,6 +176,8 @@
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
         <li><a href="#ggforestplot-0-0-1">0.0.1</a></li>
+        <li><a href="#ggforestplot-0-0-2">0.0.2</a></li>
+        <li><a href="#ggforestplot-0-1-0">0.1.0</a></li>
       </ul>
     </div>
   </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Example of Biomarker Grouping Data Frame for All Nightingale Biomarkers — df_grouping_all_NG_biomarkers • ggforestplot</title>
+<title>Example of Biomarker Grouping Data Frames for Nightingale Biomarkers — df_grouping_all_NG_biomarkers • ggforestplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,11 +42,11 @@
 
 
 
-<meta property="og:title" content="Example of Biomarker Grouping Data Frame for All Nightingale Biomarkers — df_grouping_all_NG_biomarkers" />
-<meta property="og:description" content="A data frame containing all the Nightingale Health Biomarkers' in a
-machine readable name format along with a custom grouping, a 2-page and a
-2-column specification. This data frame is used by
-plot_all_NG_biomarkers." />
+<meta property="og:title" content="Example of Biomarker Grouping Data Frames for Nightingale Biomarkers — df_grouping_all_NG_biomarkers" />
+<meta property="og:description" content="A data frame containing example custom groupings for the Nightingale Health
+biomarkers in a machine readable name format. There are two custom groupings
+available for 2016 and 2020 biomarker platforms. These groupings are used
+with plot_all_NG_biomarkers." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -80,7 +80,7 @@ plot_all_NG_biomarkers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggforestplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -125,16 +125,16 @@ plot_all_NG_biomarkers." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Example of Biomarker Grouping Data Frame for All Nightingale Biomarkers</h1>
+    <h1>Example of Biomarker Grouping Data Frames for Nightingale Biomarkers</h1>
     <small class="dont-index">Source: <a href='https://github.com/nightingalehealth/ggforestplot/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>df_grouping_all_NG_biomarkers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A data frame containing all the Nightingale Health Biomarkers' in a
-machine readable name format along with a custom grouping, a 2-page and a
-2-column specification. This data frame is used by
-<code><a href='plot_all_NG_biomarkers.html'>plot_all_NG_biomarkers</a></code>.</p>
+    <p>A data frame containing example custom groupings for the Nightingale Health
+biomarkers in a machine readable name format. There are two custom groupings
+available for 2016 and 2020 biomarker platforms. These groupings are used
+with <code><a href='plot_all_NG_biomarkers.html'>plot_all_NG_biomarkers</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='no'>df_grouping_all_NG_biomarkers</span></pre>
@@ -142,15 +142,18 @@ machine readable name format along with a custom grouping, a 2-page and a
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame (tibble) with 228 rows and 4 columns:</p><dl class='dl-horizontal'>
-  <dt>machine_readable_name</dt><dd><p>Biomarker machine readable name, i.e. the one
-  delivered with the csv data format.</p></dd>
-  <dt>group_custom</dt><dd><p>An example of a slightly different grouping than the one
-  provided in <code><a href='df_NG_biomarker_metadata.html'>df_NG_biomarker_metadata</a></code>.</p></dd>
-  <dt>column</dt><dd><p>An integer indicating the column number for plotting in a
-  certain layout, see <code><a href='plot_all_NG_biomarkers.html'>plot_all_NG_biomarkers</a></code>.</p></dd>
-  <dt>page</dt><dd><p>An integer indicating the page number for plotting in a
-  certain layout, see <code><a href='plot_all_NG_biomarkers.html'>plot_all_NG_biomarkers</a></code>.</p></dd>
+    <p>A data frame (tibble) with 2 rows and 2 columns:</p><dl class='dl-horizontal'>
+  <dt>version</dt><dd><p>Biomarker platform version.</p></dd>
+  <dt>layout</dt><dd><p>A data frame (tibble) defining layout:
+  <ul>
+<li><p><code>machine_readable_name</code> Biomarker machine readable name, i.e. the one
+  delivered with the csv data format.</p></li>
+<li><p><code>group_custom</code> A character indication group titles.</p></li>
+<li><p><code>column</code> An integer indicating the column number in a
+  layout, see <code><a href='plot_all_NG_biomarkers.html'>plot_all_NG_biomarkers</a></code>.</p></li>
+<li><p><code>page</code> An integer indicating the page number in a
+  layout, see <code><a href='plot_all_NG_biomarkers.html'>plot_all_NG_biomarkers</a></code>.</p></li>
+</ul></p></dd>
 
 </dl>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>

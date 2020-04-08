@@ -1,7 +1,7 @@
 Package: ggforestplot
 Type: Package
 Title: Forestplots of Measures of Effects and Their Confidence Intervals
-Version: 0.0.2
+Version: 0.1.0
 Authors@R: c(
     person(
         "Ilari", "Scheinin", email = "ilari.scheinin@nightingalehealth.com",
@@ -43,6 +43,7 @@ Imports:
     broom,
     dplyr (>= 0.8.0),
     generics,
+    ggforce,
     ggplot2,
     ggplotify,
     ggstance,
@@ -56,7 +57,9 @@ Imports:
     scales,
     stringr,
     survival,
-    tidyr (>= 1.0.0)
+    tibble,
+    tidyr (>= 1.0.0),
+    tidyselect
 Suggests:
     knitr, 
     readr,
@@ -64,13 +67,10 @@ Suggests:
     tidyverse,
     testthat,
     vdiffr
-Remotes: 
-    github::thomasp85/patchwork
 License: MIT + file LICENSE
 BugReports: https://github.com/nightingalehealth/ggforestplot/issues
 URL: https://nightingalehealth.github.io/ggforestplot/index.html, https://github.com/nightingalehealth/ggforestplot
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
-

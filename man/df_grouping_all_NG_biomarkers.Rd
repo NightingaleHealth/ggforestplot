@@ -3,26 +3,30 @@
 \docType{data}
 \name{df_grouping_all_NG_biomarkers}
 \alias{df_grouping_all_NG_biomarkers}
-\title{Example of Biomarker Grouping Data Frame for All Nightingale Biomarkers}
-\format{A data frame (tibble) with 228 rows and 4 columns:
+\title{Example of Biomarker Grouping Data Frames for Nightingale Biomarkers}
+\format{A data frame (tibble) with 2 rows and 2 columns:
 \describe{
-  \item{machine_readable_name}{Biomarker machine readable name, i.e. the one
-  delivered with the csv data format.}
-  \item{group_custom}{An example of a slightly different grouping than the one
-  provided in \code{\link{df_NG_biomarker_metadata}}.}
-  \item{column}{An integer indicating the column number for plotting in a
-  certain layout, see \code{\link{plot_all_NG_biomarkers}}.}
-  \item{page}{An integer indicating the page number for plotting in a
-  certain layout, see \code{\link{plot_all_NG_biomarkers}}.}
+  \item{version}{Biomarker platform version.}
+  \item{layout}{A data frame (tibble) defining layout:
+  \itemize{
+  \item \code{machine_readable_name} Biomarker machine readable name, i.e. the one
+  delivered with the csv data format.
+  \item \code{group_custom} A character indication group titles.
+  \item \code{column} An integer indicating the column number in a
+  layout, see \code{\link{plot_all_NG_biomarkers}}.
+  \item \code{page} An integer indicating the page number in a
+  layout, see \code{\link{plot_all_NG_biomarkers}}.
+  }
+}
 }}
 \usage{
 df_grouping_all_NG_biomarkers
 }
 \description{
-A data frame containing all the Nightingale Health Biomarkers' in a
-machine readable name format along with a custom grouping, a 2-page and a
-2-column specification. This data frame is used by
-\code{\link{plot_all_NG_biomarkers}}.
+A data frame containing example custom groupings for the Nightingale Health
+biomarkers in a machine readable name format. There are two custom groupings
+available for 2016 and 2020 biomarker platforms. These groupings are used
+with \code{\link{plot_all_NG_biomarkers}}.
 }
 \seealso{
 Data frame \code{\link{df_NG_biomarker_metadata}} with information

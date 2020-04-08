@@ -4,8 +4,11 @@
 \alias{theme_forest}
 \title{Forestplot Theme}
 \usage{
-theme_forest(base_size = 13, base_line_size = base_size/22,
-  base_rect_size = base_size/22)
+theme_forest(
+  base_size = 13,
+  base_line_size = base_size/22,
+  base_rect_size = base_size/22
+)
 }
 \arguments{
 \item{base_size}{base font size}

@@ -20,16 +20,16 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Maria Kalimeri \email{maria.kalimeri@nightingalehealth.com} (0000-0002-6569-7553)
+\strong{Maintainer}: Maria Kalimeri \email{maria.kalimeri@nightingalehealth.com} (\href{https://orcid.org/0000-0002-6569-7553}{ORCID})
 
 Authors:
 \itemize{
-  \item Ilari Scheinin \email{ilari.scheinin@nightingalehealth.com} (0000-0002-4696-9066)
+  \item Ilari Scheinin \email{ilari.scheinin@nightingalehealth.com} (\href{https://orcid.org/0000-0002-4696-9066}{ORCID})
   \item Vilma Jagerroos \email{vilma.jagerroos@nightingalehealth.com}
-  \item Juuso Parkkinen \email{juuso.parkkinen@nightingalehealth.com} (0000-0002-7818-5901)
-  \item Emmi Tikkanen \email{emmi.tikkanen@nightingalehealth.com} (0000-0003-1634-4134)
-  \item Peter Würtz \email{peter.wurtz@nightingalehealth.com} (0000-0002-5832-0221)
-  \item Antti Kangas \email{antti.kangas@nightingalehealth.com} (0000-0001-7492-1732)
+  \item Juuso Parkkinen \email{juuso.parkkinen@nightingalehealth.com} (\href{https://orcid.org/0000-0002-7818-5901}{ORCID})
+  \item Emmi Tikkanen \email{emmi.tikkanen@nightingalehealth.com} (\href{https://orcid.org/0000-0003-1634-4134}{ORCID})
+  \item Peter Würtz \email{peter.wurtz@nightingalehealth.com} (\href{https://orcid.org/0000-0002-5832-0221}{ORCID})
+  \item Antti Kangas \email{antti.kangas@nightingalehealth.com} (\href{https://orcid.org/0000-0001-7492-1732}{ORCID})
 }
 
 Other contributors:

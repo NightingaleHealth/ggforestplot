@@ -48,7 +48,7 @@ Throughout the tutorial, we will be using the collection of
 philosophy. You can install the complete tidyverse by typing the following line 
 of code in the R console:
 
-```{r, tidy = TRUE, eval = FALSE}
+```{r, tidy = FALSE, eval = FALSE}
 # Install the tidyverse packages
 install.packages("tidyverse")
 
@@ -116,8 +116,13 @@ Let us drop the tag columns as they are not used in this demo.
 
 ```{r, tidy = FALSE}
 df_nmr_results <- 
-  df_nmr_results %>% 
-  select(-(EDTA_plasma:Unidentified_small_molecule_c))
+  df_nmr_results %>%
+  dplyr::select(
+    .data$Sample_id,
+    tidyselect::any_of(
+      ggforestplot::df_NG_biomarker_metadata$machine_readable_name
+    )
+  )
 ```
 
 ### Rename alternative biomarker names
@@ -136,7 +141,7 @@ biomarker name (as long as they are found in the
 # df_nmr_results_alt_names
 
 alt_names <- 
-  names(df_nmr_results_alt_names)
+  names(df_nmr_results)
 
 new_names <- 
   alt_names %>% 
@@ -163,7 +168,7 @@ names(alt_names) <- new_names
 
 # Rename your result data frame with machine_readable_names 
 df_nmr_results_alt_names <- 
-  df_nmr_results_alt_names %>% 
+  df_nmr_results %>% 
   rename(!!alt_names)
 
 ```
@@ -275,32 +280,37 @@ The association of $x$ with $y$ refers to the beta coefficient ($\beta$).
 
 Below, we use function `ggforestplot::discovery_regression()`, with input parameter
 `model` set to `'lm'` to estimate multiple, adjusted, linear associations, for 
-all the biomarkers. Note that we log tranform and scale the biomarkers so that 
+all the biomarkers. Note that we scale the biomarkers so that 
 the magnitude of associations are directly comparable across the different 
-biomarkers. (Note: The log-transformation is not, strictly speaking, required 
-here: the blood metabolites are in this case the outcome and not the exposure, 
-while log-tranformation is done in order to satisfy the assumption of linear 
-regression for normal distribution of the residuals.)
+biomarkers. Log-transformation is done in order to satisfy the assumption of linear regression for normal distribution of the residuals.
 
 ```{r, message = FALSE, tidy = FALSE}
 # Extract names of NMR biomarkers
-nmr_biomarkers <- names(df_nmr_results %>% select(-Sample_id))
+nmr_biomarkers <- dplyr::intersect(
+  ggforestplot::df_NG_biomarker_metadata$machine_readable_name,
+  colnames(df_nmr_results)
+)
 
-# NMR biomarkers here should be 228
-stopifnot(length(nmr_biomarkers) == 228)
+# NMR biomarkers here should be 250
+stopifnot(length(nmr_biomarkers) == 250)
 
 # Select only variables to be used for the model and collapse to a long data 
 # format
 df_long <-
   df_full_data %>%
   # Select only model variables
-  dplyr::select(nmr_biomarkers, gender, baseline_age, BMI) %>%
-  # log-tranform biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(log1p(.))) %>%
-  # Scale biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(as.numeric(scale(.)))) %>%
-  # Collapse to a long data format
-  tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
+  dplyr::select(tidyselect::all_of(nmr_biomarkers), gender, baseline_age, BMI) %>%
+  # Log-transform and scale biomarkers
+  dplyr::mutate_at(
+    .vars = dplyr::vars(tidyselect::all_of(nmr_biomarkers)),
+    .funs = ~ .x %>% log1p() %>% scale %>% as.numeric()
+  ) %>%
+  # Collapse to a long format
+  tidyr::gather(
+    key = biomarkerid,
+    value = biomarkervalue,
+    tidyselect::all_of(nmr_biomarkers)
+  )
 
 # Estimate sex- and age-adjusted associations of metabolite to BMI
 df_assoc_per_biomarker_bmi <-
@@ -327,7 +337,7 @@ df_assoc_per_biomarker_bmi <-
 head(df_assoc_per_biomarker_bmi)
 ```
 
-The data frame `df_assoc_per_biomarker_bmi` above, contains 228 rows, one for each
+The data frame `df_assoc_per_biomarker_bmi` above, contains 250 rows, one for each
 blood biomarker, and 5 variables (columns): the `biomarkerid` (same as variable 
 `machine_readable_name` in `df_NG_biomarker_metadata`) which has the 
 biomarker abbreviations in the same format as in the input csv file, the biomarker `name` 
@@ -339,14 +349,14 @@ the standard error and the p-value, respectively.
 
 Let's now visualize the results. For the purposes of this demo, we will plot a 
 selected subset of the biomarkers in a forestplot layout. At the end of 
-the tutorial, you will find an example of how to plot associations for all 228 
-Nightingale biomarkers in a 2-page pdf  (see also `vignette("ggforestplot")` 
+the tutorial, you will find an example of how to plot associations for all 
+Nightingale biomarkers in a pdf  (see also `vignette("ggforestplot")` 
 for more details on the usage of `ggforestplot::forestplot()`).
 
 The `ggforestplot` package includes a data frame, called 
 `ggforestplot::df_NG_biomarker_metadata`, with metadata on the Nightingale 
-blood biomarkers, such as different naming options, descriptions, group/sugroup 
-information and units of measurement. We will use the group (or sugroup) 
+blood biomarkers, such as different naming options, descriptions and group/sugroup 
+information. We will use the group (or sugroup) 
 information in this data frame to decide which groups of biomarkers and in what 
 order we want to visualize here.
 
@@ -373,7 +383,8 @@ group_order <- c(
   "Fluid balance",
   "Inflammation",
   "Fatty acids",
-  "Glycerides and phospholipids",
+  "Triglycerides",
+  "Other lipids",
   "Cholesterol"
 )
   
@@ -393,10 +404,10 @@ df_with_groups <-
 ##### Statistical significance for multiple testing
 
 We'd also like to add to the forrestplot a Bonferroni correction to account for 
-multiple testing. Here we have a comparison of 228 biomarkers. If we suppose the
+multiple testing. Here we have a comparison of 250 biomarkers. If we suppose the
 common significance threshold $\alpha = 0.05$, the Bonferroni correction for each 
-individual hypothesis, assuming the 228 tests are independent, is 
-$\alpha = 0.05 / 228 \approx 0.0002$. However, for biologically correlated 
+individual hypothesis, assuming the 250 tests are independent, is 
+$\alpha = 0.05 / 250 \approx 0.0002$. However, for biologically correlated 
 measures this correction is too strict; Here, instead of correcting for the 
 total number of biomarkers we will use the number of principal components 
 that explain 99% of the variance in the data. 
@@ -405,8 +416,8 @@ that explain 99% of the variance in the data.
 # Perform principal component analysis on metabolic data
 df_pca <- 
   df_full_data %>% 
-  select(Total_C:S_HDL_TG_pct) %>% 
-  nest() %>% 
+  select(tidyselect::all_of(nmr_biomarkers)) %>% 
+  nest(data = dplyr::everything()) %>% 
   mutate(
     # Perform PCA on the data above, after scaling and centering to 0 
     pca = map(data, ~ stats::prcomp(.x, center = TRUE, scale = TRUE)),
@@ -421,7 +432,7 @@ df_pca_variance <-
   df_pca %>% 
   unnest(pca_aug) %>% 
   # Estimate variance for the PCA projected variables
-  summarize_at(.vars = vars(starts_with(".fittedPC")), .funs = funs(var)) %>% 
+  summarize_at(.vars = vars(starts_with(".fittedPC")), .funs = ~ var(.x)) %>% 
   # Gather data in a long format 
   gather(key = PC, value = variance) %>% 
   # Estimate cumulative normalized variance
@@ -435,15 +446,18 @@ pc_99 <-
   nrow()
 
 print(pc_99)
+
+# Corrected significance threshold
+psignif <- signif(0.05 / pc_99, 1)
 ```
 
-Therefore, our significance threshold here will be $\alpha = 0.05 / 49 \approx 0.001$
+Therefore, our significance threshold here will be $\alpha = 0.05 / `r pc_99` \approx `r psignif`$
 
 Below we plot the results. In the forestplot function, our main input is the 
 data frame `df_assoc_per_biomarker_bmi`, while we use the previously constructed
 data frame `df_with_groups` and its variable `group` to impose the grouping and 
 the order of biomarkers in the plot. For the statistical significance, we input 
-the significance threshold as the parameter `psignif = 0.001` and we define 
+the significance threshold as the parameter `psignif = `r psignif`` and we define 
 explicitly the variable name in `df_assoc_per_biomarker_bmi` that contains the 
 p-values of the linear regression, in this case the column pvalue. 
 
@@ -453,53 +467,29 @@ df_to_plot <-
   df_assoc_per_biomarker_bmi %>%
   # use right_join, with df_grouping on the right, to preserve the order of 
   # biomarkers it specifies. 
-  dplyr::right_join(., df_with_groups, by = "name") 
+  dplyr::right_join(., df_with_groups, by = "name") %>%
+  dplyr::mutate(
+    group = factor(.data$group, levels = group_order)
+  ) %>%
+  tidyr::drop_na(.data$estimate)
 
 # Draw a forestplot of cross-sectional, linear associations.
-ggplot_multi <-
-  df_to_plot %>%
-  nest(-group, .key = "data") %>%
-  # Apply forestplot to each group 
-  mutate(
-    gg_groups = purrr::map2(
-      data, group, ~ forestplot(
-        df = .x,
-        pvalue = pvalue,
-        psignif = 0.001,
-        xlab = "1-SD increment in biomarker concentration\nper 1-SD increment in BMI",
-        title = .y
-      ) +
-        ggplot2::coord_cartesian(xlim = c(-0.3, 0.4))
-    ),
-    # Optional: remove x-axis and legend for all plots except the bottom one
-    gg_groups = ifelse(
-      test = row_number() != n(),
-      yes =
-        purrr::map(gg_groups, ~ . +
-          theme(
-            axis.text.x = element_blank(),
-            axis.title.x = element_blank(),
-            axis.ticks.x = element_blank(),
-            plot.margin = unit(c(1, 2, 1, 2), "mm")
-          ) +
-          ggplot2::theme(legend.position = "none")),
-      no = gg_groups
-    ),
-    rel_heights = purrr::map(
-      data,  ~ nrow(.) 
-    ) %>% unlist()
+forestplot(
+  df = df_to_plot,
+  pvalue = pvalue,
+  psignif = psignif,
+  xlab = "1-SD increment in biomarker concentration\nper unit increment in BMI"
+) +
+  ggforce::facet_col(
+    facets = ~group,
+    scales = "free_y",
+    space = "free"
   )
-
-patchwork::wrap_plots(
-  ggplot_multi$gg_groups,
-  ncol = 1, 
-  heights = ggplot_multi$rel_heights
-)
 ```
 
 The figure shows that BMI is significantly associated with several of the 
 plotted blood biomarkers. Specifically, higher values of branched chain amino 
-acids, aromatic amino acids omega-6 and glycoprotein acetylation are significantly 
+acids, aromatic amino acids, omega-6 and glycoprotein acetylation are significantly 
 associated with obesity, as has been previously seen in [Würtz P et al. 
 Metabolic Signatures of Adiposity in Young Adults: Mendelian Randomization Analysis and Effects of Weight Change., 
 PLoS Med. 2014.](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1001765)
@@ -521,13 +511,18 @@ to estimate the gender-, age- and BMI- adjusted hazard ratios for type 2 diabete
 df_long <-
   df_full_data %>%
   # Select only model variables
-  dplyr::select(nmr_biomarkers, gender, baseline_age, BMI, age_at_diabetes, incident_diabetes) %>%
-  # log-tranform biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(log1p(.))) %>%
-  # Scale biomarkers
-  dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = dplyr::funs(as.numeric(scale(.)))) %>%
-  # Collapse to a long data format
-  tidyr::gather(key = biomarkerid, value = biomarkervalue, nmr_biomarkers)
+  dplyr::select(tidyselect::all_of(nmr_biomarkers), gender, baseline_age, BMI, age_at_diabetes, incident_diabetes) %>%
+  # Log-transform and scale biomarkers
+  dplyr::mutate_at(
+    .vars = dplyr::vars(tidyselect::all_of(nmr_biomarkers)),
+    .funs = ~ .x %>% log1p() %>% scale %>% as.numeric()
+  ) %>%
+  # Collapse to a long format
+  tidyr::gather(
+    key = biomarkerid,
+    value = biomarkervalue,
+    tidyselect::all_of(nmr_biomarkers)
+  )
 
 # Estimate sex-adjusted associations of metabolite to T2D
 # Notice that parameter model below is set to 'coxph'
@@ -593,16 +588,14 @@ this case, the `beta` values, here log hazard ratios, are exponentiated inside
 the forestplot to obtain hazard ratios and plotted in a logarithmic scale. 
 The confidence intervals for the odds ratios are estimated using the standard 
 errors of the log hazard ratios, as follows 
-$\text{CI}_\text{low} = \exp(\beta - 0.95 * \text{SE})$ and 
-$\text{CI}_\text{high} = \exp(\beta - 0.95 * \text{SE})$. If you wish to use 
+$\text{CI}_\text{low} = \exp(\beta - 1.96 * \text{SE})$ and 
+$\text{CI}_\text{high} = \exp(\beta + 1.96 * \text{SE})$. If you wish to use 
 some confidence interval other than the default 95%, you may specify this in the 
 parameter `ci` of the function.
 
 ### A forestplot for all Nightingale blood biomarkers
 
-Finally, the `ggforestplot` package offers a custom function that plots and 
-prints in a 2-page pdf file all Nightingale blood biomarkers, namely 
-`plot_all_NG_biomarkers()`. It's usage is straightforward.
+Finally, the `ggforestplot` package provides a custom function that plots and prints all Nightingale blood biomarkers in a single pdf file, called `plot_all_NG_biomarkers()`. There are two layouts available for 2016 and 2020 versions of the biomarker platform. Alternatively, one can also input a custom layout. Its usage is straightforward.
 
 ```{r, tidy = FALSE, eval = FALSE}
 # Plot in all biomarkers in a two-page pdf file
@@ -613,7 +606,7 @@ plot_all_NG_biomarkers(
   estimate = estimate, 
   se = se, 
   pvalue = pvalue, 
-  xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
+  xlab = "1-SD increment in biomarker concentration\nper unit increment in BMI",
   filename = "all_ng_associations_bmi.pdf"
 )
 ```
@@ -630,12 +623,12 @@ plot_all_NG_biomarkers(
   estimate = estimate, 
   se = se, 
   pvalue = pvalue, 
-  xlab = "1-SD increment in cardiometabolic trait\nper 1-SD increment in biomarker concentration",
+  xlab = "1-SD increment in biomarker concentration\nper unit increment in BMI",
   filename = "figures/all_ng_associations_bmi.pdf"
 )
 ```
 
-You may view the output of this function [here](https://github.com/NightingaleHealth/ggforestplot/blob/master/vignettes/figures/all_ng_associations_bmi.pdf)
+You may view the output of this function [here](https://github.com/NightingaleHealth/ggforestplot/blob/master/vignettes/figures/all_ng_associations_bmi.pdf).
 
 ## Final remarks
 

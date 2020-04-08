@@ -78,7 +78,7 @@ vertical layout." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggforestplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -133,9 +133,19 @@ vertical layout." />
 vertical layout.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>forestplot</span>(<span class='no'>df</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='no'>estimate</span>, <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>se</span>,
-  <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logodds</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>psignif</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>forestplot</span>(
+  <span class='no'>df</span>,
+  <span class='kw'>name</span> <span class='kw'>=</span> <span class='no'>name</span>,
+  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='no'>estimate</span>,
+  <span class='kw'>se</span> <span class='kw'>=</span> <span class='no'>se</span>,
+  <span class='kw'>pvalue</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>colour</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>logodds</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>psignif</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -219,7 +229,7 @@ confidence interval to be drawn.</p></td>
     <tr>
       <th>...</th>
       <td><p><code>ggplot2</code> graphical parameters such as <code>title</code>,
-<code>ylab</code>, <code>xlab</code> e.t.c. to be passed along.</p></td>
+<code>ylab</code>, <code>xlab</code>, <code>xtickbreaks</code> etc. to be passed along.</p></td>
     </tr>
     </table>
 
@@ -239,7 +249,7 @@ introduction to non-standard evaluation.</p>
 <span class='no'>df_linear</span> <span class='kw'>&lt;-</span>
   <span class='no'>df_linear_associations</span> <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>name</span>) <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/ranking.html'>row_number</a></span>() <span class='kw'>&lt;</span> <span class='fl'>30</span>)
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/ranking.html'>row_number</a></span>() <span class='kw'>&lt;=</span> <span class='fl'>30</span>)
 
 <span class='co'># Forestplot</span>
 <span class='fu'>forestplot</span>(
@@ -254,7 +264,7 @@ introduction to non-standard evaluation.</p>
 <span class='no'>df_logodds</span> <span class='kw'>&lt;-</span>
   <span class='no'>df_logodds_associations</span> <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>name</span>) <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/ranking.html'>row_number</a></span>() <span class='kw'>&lt;</span> <span class='fl'>30</span>) <span class='kw'>%&gt;%</span>
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/ranking.html'>row_number</a></span>() <span class='kw'>&lt;=</span> <span class='fl'>30</span>) <span class='kw'>%&gt;%</span>
   <span class='co'># Set the study variable to a factor to preserve order of appearance</span>
   <span class='co'># Set class to factor to set order of display.</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(
@@ -282,24 +292,18 @@ introduction to non-standard evaluation.</p>
   <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>study</span>,
   <span class='kw'>shape</span> <span class='kw'>=</span> <span class='no'>study</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Odds ratio for incident type 2 diabetes (95% CI)
-  per 1-SD increment in biomarker concentration"</span>
+  per 1-SD increment in biomarker concentration"</span>,
+  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>2.2</span>),
+  <span class='co'># You can explicitly define x-tick breaks</span>
+  <span class='kw'>xtickbreaks</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>0.8</span>, <span class='fl'>1.0</span>, <span class='fl'>1.2</span>, <span class='fl'>1.5</span>, <span class='fl'>2.0</span>)
 ) +
-  <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_cartesian.html'>coord_cartesian</a></span>(<span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>2.2</span>)) +
   <span class='co'># You may also want to add a manual shape to mark meta-analysis with a</span>
   <span class='co'># diamond shape</span>
   <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_shape_manual</a></span>(
     <span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>23L</span>, <span class='fl'>21L</span>, <span class='fl'>21L</span>, <span class='fl'>21L</span>, <span class='fl'>21L</span>),
     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Meta-analysis"</span>, <span class='st'>"NFBC-1997"</span>, <span class='st'>"DILGOM"</span>, <span class='st'>"FINRISK-1997"</span>, <span class='st'>"YFS"</span>)
-  ) +
-  <span class='co'># Finally, you may want to have full control on the xtick locations, so you</span>
-  <span class='co'># may define them explicitly by overwritting the existing</span>
-  <span class='co'># 'scale_x_continuous()'</span>
-  <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span>(
-    <span class='kw'>trans</span> <span class='kw'>=</span> <span class='st'>"log10"</span>,
-    <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>0.8</span>, <span class='fl'>1.0</span>, <span class='fl'>1.2</span>, <span class='fl'>1.5</span>, <span class='fl'>2.0</span>)
   )</div><div class='output co'>#&gt; <span class='message'>Scale for 'shape' is already present. Adding another scale for 'shape', which</span>
-#&gt; <span class='message'>will replace the existing scale.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'x' is already present. Adding another scale for 'x', which will</span>
-#&gt; <span class='message'>replace the existing scale.</span></div><div class='img'><img src='forestplot-3.png' alt='' width='700' height='433' /></div></pre>
+#&gt; <span class='message'>will replace the existing scale.</span></div><div class='img'><img src='forestplot-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

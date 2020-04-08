@@ -30,10 +30,11 @@
 #' @param verbose logical (default FALSE). If TRUE it prints a message with the
 #' names of the predictor and outcome. This may come in handy when, for example,
 #' fitting multiple outcomes.
-#' @return A data frame with the following: a character variable with the same
+#' @return A data frame with the following columns: a character variable with the same
 #' name as the \code{key} parameter and numeric variables \code{estimate},
 #' \code{se} and \code{pvalue} with the values of the respective variables
-#' of the linear model.
+#' of the linear model. If \code{predictor} is factor, additional column
+#' \code{term} is returned indicating factor level of \code{predictor}
 #' @importFrom purrr map
 #' @importFrom purrr map_dbl
 #' @importFrom stats lm
@@ -43,7 +44,7 @@
 #' @importFrom lazyeval is_formula
 #' @importFrom tidyr nest
 #' @importFrom broom tidy
-#' @author Maria Kalimeri, Emmi Tikkanen, Juuso Parkkinen
+#' @author Maria Kalimeri, Emmi Tikkanen, Juuso Parkkinen, Vilma Jagerroos
 #' @export
 #' @examples
 #' library(magrittr)
@@ -54,20 +55,28 @@
 #' # ggforestplot::df_demo_metabolic_data
 #'
 #' # Extract the names of the NMR biomarkers for discovery analysis
-#' nmr_biomarkers <- names(df_demo_metabolic_data)[7:234]
+#' nmr_biomarkers <- dplyr::intersect(
+#'   ggforestplot::df_NG_biomarker_metadata$machine_readable_name,
+#'   colnames(df_demo_metabolic_data)
+#')
 #'
 #' # Select only variables to be used for the model and collapse to a long
 #' # format
 #' df_long <-
 #'   df_demo_metabolic_data %>%
 #'   # Select only model variables
-#'   dplyr::select(nmr_biomarkers, gender, BMI) %>%
-#'   # log-tranform biomarkers
-#'   dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~log1p(.))) %>%
-#'   # Scale biomarkers
-#'   dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~as.numeric(scale(.)))) %>%
+#'   dplyr::select(tidyselect::all_of(nmr_biomarkers), gender, BMI) %>%
+#'   # Log-transform and scale biomarkers
+#'   dplyr::mutate_at(
+#'     .vars = dplyr::vars(tidyselect::all_of(nmr_biomarkers)),
+#'     .funs = ~ .x %>% log1p() %>% scale() %>% as.numeric()
+#'   ) %>%
 #'   # Collapse to a long format
-#'   tidyr::gather(key = machine_readable_name, value = biomarkervalue, nmr_biomarkers)
+#'   tidyr::gather(
+#'     key = machine_readable_name,
+#'     value = biomarkervalue,
+#'     tidyselect::all_of(nmr_biomarkers)
+#'   )
 #'
 #' df_assoc_per_biomarker <-
 #'   discovery_regression(
@@ -110,7 +119,10 @@
 #' # Logistic Regression Example
 #'
 #' # Extract names of relevant NMR biomarkers
-#' nmr_biomarkers <- names(df_demo_metabolic_data)[7:234]
+#' nmr_biomarkers <- dplyr::intersect(
+#'   ggforestplot::df_NG_biomarker_metadata$machine_readable_name,
+#'   colnames(df_demo_metabolic_data)
+#' )
 #'
 #' # Select only variables to be used for the model and
 #' # collapse to a long format
@@ -118,18 +130,23 @@
 #'   df_demo_metabolic_data %>%
 #'   # Select only model variables (avoid memory overhead)
 #'   dplyr::select(
-#'     nmr_biomarkers,
+#'     tidyselect::all_of(nmr_biomarkers),
 #'     gender,
 #'     incident_diabetes,
 #'     BMI,
 #'     baseline_age
 #'   ) %>%
-#'   # log-tranform biomarkers
-#'   dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~log1p(.))) %>%
-#'   # Scale biomarkers
-#'   dplyr::mutate_at(.vars = c(nmr_biomarkers), .funs = list(~as.numeric(scale(.)))) %>%
+#    Log-transform and scale biomarkers
+#'   dplyr::mutate_at(
+#'     .vars = dplyr::vars(tidyselect::all_of(nmr_biomarkers)),
+#'     .funs = ~ .x %>% log1p() %>% scale() %>% as.numeric()
+#'   ) %>%
 #'   # Collapse to a long format
-#'   tidyr::gather(key = machine_readable_name, value = biomarkervalue, nmr_biomarkers)
+#'   tidyr::gather(
+#'     key = machine_readable_name,
+#'     value = biomarkervalue,
+#'     tidyselect::all_of(nmr_biomarkers)
+#'   )
 #'
 #' df_assoc_per_biomarker_gender <-
 #'   discovery_regression(
@@ -146,7 +163,10 @@
 #' # Filter Nightingale metadata data frame for biomarkers of interest
 #' df_grouping <-
 #'   ggforestplot::df_NG_biomarker_metadata %>%
-#'   dplyr::filter(group %in% "Cholesterol")
+#'   dplyr::filter(
+#'     group %in% "Cholesterol",
+#'     !(machine_readable_name %in% c("HDL2_C", "HDL3_C"))
+#'   )
 #'
 #' # Join the association data frame with the group data above
 #' df <-
@@ -249,18 +269,46 @@ discovery_regression <- function(df_long,
   }
 
   # Extract variables from model
-  res %>%
-    mutate(
-      tidymodel = purrr::map(.data$model, ~ broom::tidy(.x)),
-      estimate = purrr::map_dbl(.data$tidymodel, ~ .x %>%
-        filter(term == quo_name(predictor)) %>%
-        pull(estimate)),
-      se = purrr::map_dbl(.data$tidymodel, ~ .x %>%
-        filter(term == quo_name(predictor)) %>%
-        pull(std.error)),
-      pvalue = purrr::map_dbl(.data$tidymodel, ~ .x %>%
-        filter(term == quo_name(predictor)) %>%
-        pull(p.value))
-    ) %>%
-    select(!!key, .data$estimate, .data$se, .data$pvalue)
+  if (is.factor(dplyr::pull(df_long, !!predictor))) {
+    terms <- paste0(
+      quo_name(predictor),
+      levels(dplyr::pull(df_long, !!predictor))[-1]
+    )
+
+    res %>%
+      dplyr::mutate(
+        tidymodel = purrr::map(
+          .x = .data$model,
+          .f = ~ .x %>%
+            broom::tidy() %>%
+            dplyr::filter(.data$term %in% terms) %>%
+            dplyr::select(
+              .data$term,
+              .data$estimate,
+              se = .data$std.error,
+              pvalue = .data$p.value
+            )
+        )
+      ) %>%
+      dplyr::select(!!key, .data$tidymodel) %>%
+      tidyr::unnest(.data$tidymodel)
+
+  } else {
+    res %>%
+      dplyr::mutate(
+        tidymodel = purrr::map(
+          .x = .data$model,
+          .f = ~ .x %>%
+            broom::tidy() %>%
+            dplyr::filter(.data$term == quo_name(predictor)) %>%
+            dplyr::select(
+              .data$estimate,
+              se = .data$std.error,
+              pvalue = .data$p.value
+            )
+        )
+      ) %>%
+      dplyr::select(!!key, .data$tidymodel) %>%
+      tidyr::unnest(.data$tidymodel)
+  }
 }
