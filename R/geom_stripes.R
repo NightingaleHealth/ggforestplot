@@ -89,7 +89,8 @@ GeomStripes <- ggplot2::ggproto("GeomStripes", ggplot2::Geom,
     # requested 0th size. Seems to be some ggplot2 bug caused by grid overriding
     # an lwd parameter somewhere, unless the size is set to NA. Found solution here
     # https://stackoverflow.com/questions/43417514/getting-rid-of-border-in-pdf-output-for-geom-label-for-ggplot2-in-r
-    alpha = NA, colour = "black", linetype = "solid", size = NA
+    alpha = NA, colour = "black", linetype = "solid", size = NA,
+    vjust = 0.5
   ),
 
   # draw_key = ggplot2::draw_key_blank,
@@ -100,8 +101,8 @@ GeomStripes <- ggplot2::ggproto("GeomStripes", ggplot2::Geom,
       data %>%
         dplyr::mutate(
           y = round(.data$y),
-          ymin = .data$y - 0.5,
-          ymax = .data$y + 0.5
+          ymin = .data$y - vjust,
+          ymax = .data$y + 1 - vjust
         ) %>%
         dplyr::select(
           .data$xmin, .data$xmax,

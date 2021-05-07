@@ -14,3 +14,8 @@
 if (getRversion() >= "2.15.1") {
   utils::globalVariables(c("."))
 }
+
+## usethis namespace: start
+#' @importFrom tibble tibble
+## usethis namespace: end
+NULL
